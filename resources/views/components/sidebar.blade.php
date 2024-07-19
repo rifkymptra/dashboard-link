@@ -1,7 +1,7 @@
 <div :class="open ? 'w-64' : 'w-0'"
-    class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-50 md:z-auto">
-    <nav class="mt-10">
-        <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+    class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-50 md:z-auto border-r border-gray-200">
+    <nav class="mt-10 transition-all duration-300" :class="open ? 'block' : 'hidden'">
+        <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200" ">
             <img src="{{ asset('svg/home.svg') }}" class="inline-block h-6 w-6 mr-3" />
             <span :class="open ? 'inline' : 'hidden'">Beranda</span>
         </a>
@@ -15,12 +15,7 @@
                 <img src="{{ asset('svg/chevron-down.svg') }}" :class="{ 'rotate-180': openSection }"
                     class="h-5 w-5 transition-transform duration-800" />
             </button>
-            <div x-show="openSection" x-transition:enter="transition ease-out duration-200"
-                x-transition:enter-start="transform opacity-0 translate-y-20%"
-                x-transition:enter-end="transform opacity-100 translate-y-0"
-                x-transition:leave="transition ease-in duration-200"
-                x-transition:leave-start="transform opacity-100 translate-y-0"
-                x-transition:leave-end="transform opacity-0 translate-y-20%" class="pl-4">
+            <div x-show="openSection" class="pl-4">
                 <a href="#"
                     class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black">
                     <img src="{{ asset('svg/activity.svg') }}" class="inline-block h-6 w-6 mr-3 " />
