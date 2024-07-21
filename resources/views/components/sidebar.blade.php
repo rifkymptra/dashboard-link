@@ -1,7 +1,7 @@
 <div :class="open ? 'w-64' : 'w-0'"
     class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-50 md:z-auto border-r border-gray-200">
     <nav class="mt-10 transition-all duration-300" :class="open ? 'block' : 'hidden'">
-        <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200" ">
+        <a href="/beranda" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200" ">
             <img src="{{ asset('svg/home.svg') }}" class="inline-block h-6 w-6 mr-3" />
             <span :class="open ? 'inline' : 'hidden'">Beranda</span>
         </a>
@@ -38,7 +38,7 @@
                 </a>
             </div>
         </div>
-        <a href="#" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
+        <a href="/link" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-200">
             <img src="{{ asset('svg/link.svg') }}" class="inline-block h-6 w-6 mr-3" />
             <span :class="open ? 'inline' : 'hidden'">Link</span>
         </a>
