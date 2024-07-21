@@ -5,10 +5,9 @@
             <div class="flex justify-start items-center">
                 <!-- Toggle sidebar button (hidden on larger screens) -->
                 <button @click="open = !open" class="text-black focus:outline-none pr-2  ">
-                    <img x-show="open" src="{{ asset('svg/x.svg') }}" class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 :w-4"
-                        x-transition:enter.scale.10 x-transition />
+                    <img x-show="open" src="{{ asset('svg/x.svg') }}" class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 :w-4" />
                     <img x-show="!open" src="{{ asset('svg/align-left.svg') }}"
-                        class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 :w-4" />
+                        class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 :w-4 " />
                 </button>
 
                 <!-- Logo and site title -->
@@ -23,7 +22,7 @@
 
                 <!-- Toggle search on mobile button -->
                 <button id="toggleSidebarMobileSearch" type="button"
-                    class="p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                    class=" p-2 text-gray-500 rounded-lg lg:hidden hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                     <span class="sr-only">Search</span>
                     <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 20 20">
