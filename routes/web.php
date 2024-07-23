@@ -1,10 +1,11 @@
 <?php
 
+use App\Models\Link;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('login');
 });
 
 Route::get('/login', function () {
@@ -16,5 +17,7 @@ Route::get('/beranda', function () {
 });
 
 Route::get('/link',  function () {
-    return view('link');
+    return view('link', [
+        'links' => Link::paginate(10)
+    ]);
 });

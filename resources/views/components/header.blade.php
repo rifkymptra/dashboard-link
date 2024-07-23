@@ -13,8 +13,8 @@
                 <!-- Logo and site title -->
                 <a href="#" class="flex mr-4">
                     <img src="{{ asset('bps_logo.png') }}" class="mr-3 h-8" alt="FlowBite Logo" />
-                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Dashboard
-                        Link BPS </span>
+                    <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">DataLink Explorer
+                    </span>
                 </a>
             </div>
             <!-- Right side -->
