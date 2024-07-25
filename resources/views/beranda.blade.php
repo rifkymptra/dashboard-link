@@ -26,9 +26,9 @@
         <!-- Rangkuman Section -->
         <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="5" />
-            <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="20" />
-            <x-summary-card icon="svg/file-plus.svg" title="Link Baru" description="3" />
+            <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
+            <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
+            <x-summary-card icon="svg/file-plus.svg" title="Link Baru" description="{{ count($links) }}" />
         </div>
 
         <!-- Pintasan Section -->

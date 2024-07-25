@@ -13,7 +13,10 @@ return new class extends Migration
     {
         Schema::create('links', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('section_id')->constrained()->onDelete('cascade');
+            $table->foreignId('section_id')->constrained(
+                table: 'sections',
+                indexName: 'links_section_id'
+            )->onDelete('cascade');
             $table->string('link_name');
             $table->string('url');
             $table->string('description_link');
@@ -27,7 +30,6 @@ return new class extends Migration
             )->onDelete('set null');
             $table->string('status');
             $table->timestamps();
-            $table->string('description');
         });
     }
 

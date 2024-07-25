@@ -3,11 +3,11 @@
         <h2 class="">Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
-        <div class="flex items-center mb-4">
+        <div class="flex flex-col sm:flex-row items-center mb-4">
             <input type="text" id="search" placeholder="Search..."
-                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
-            <a href="/link/create"
-                class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 mb-2 sm:mb-0 sm:mr-2">
+            <a href="{{ route('links.create') }}"
+                class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                 <span
                     class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                     Tambah Link
@@ -19,10 +19,12 @@
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Judul</th>
-                        <th scope="col" class="px-6 py-3">Deskripsi</th>
-                        <th scope="col" class="px-6 py-3">Kategori</th>
-                        <th scope="col" class="px-6 py-3">URL</th>
+                        <th scope="col" class="px-2 sm:px-6 py-3">Judul</th>
+                        <th scope="col" class="px-2 sm:px-6 py-3">Deskripsi</th>
+                        <th scope="col" class="px-2 sm:px-6 py-3">Kategori</th>
+                        <th scope="col" class="px-2 sm:px-6 py-3">URL</th>
+                        {{-- <th scope="col" class="px-2 sm:px-6 py-3">Status</th> --}}
+                        <th scope="col" class="px-2 sm:px-6 py-3">Aksi</th> <!-- New column for actions -->
                     </tr>
                 </thead>
                 <tbody id="links-table-body">
@@ -30,14 +32,28 @@
                         <tr
                             class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                class="px-2 sm:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $link->link_name }}
                             </th>
-                            <td class="px-6 py-4">{{ $link->description_link }}</td>
-                            <td class="px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
-                            <td class="px-6 py-4">
+                            <td class="px-2 sm:px-6 py-4">{{ $link->description_link }}</td>
+                            <td class="px-2 sm:px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
+                            <td class="px-2 sm:px-6 py-4">
                                 <a href="{{ $link->url }}"
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>
+                            </td>
+                            {{-- <td class="px-2 sm:px-6 py-4">{{ $link->status }}</td> --}}
+                            <td
+                                class="px-2 sm:px-6 py-8 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 ">
+                                <form action="{{ route('approval.accept', $link->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setujui</button>
+                                </form>
+                                <form action="{{ route('approval.reject', $link->id) }}" method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                        class="w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -82,25 +98,4 @@
         </nav>
 
     </div>
-    </div>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#search').on('input', function() {
-                let query = $(this).val();
-
-                $.ajax({
-                    url: '{{ route('links.search') }}',
-                    method: 'GET',
-                    data: {
-                        search: query
-                    },
-                    success: function(response) {
-                        $('#links-table-body').html(response);
-                    }
-                });
-            });
-        });
-    </script>
 </x-layout>
