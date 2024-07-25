@@ -9,6 +9,11 @@ class Link extends Model
 {
     use HasFactory;
 
+    public function sectionId()
+    {
+        return $this->belongsTo(Section::class, 'section_id');
+    }
+
     public function submittedBy()
     {
         return $this->belongsTo(User::class, 'submitted_by');

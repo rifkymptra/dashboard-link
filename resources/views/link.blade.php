@@ -42,7 +42,7 @@
                                 {{ $link->description_link }}
                             </td>
                             <td class="px-6 py-4">
-                                {{ $link->kategori }}
+                                {{ $link->submittedBy->section->section_name }}
                             </td>
                             <td class="px-6 py-4">
                                 <a href="{{ $link->url }}"
@@ -94,8 +94,6 @@
 
 
 
-        <div class="mt-4">
-            {{-- {{ $users->links() }} --}} www.instagram.com
-        </div>
+
     </div>
 </x-layout>

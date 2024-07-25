@@ -22,7 +22,7 @@
 
 
             <!-- Content -->
-            <div class="flex-1 p-4 bg-white">
+            <div class="flex-1 p-4 bg-white pt-20">
                 {{ $slot }}
             </div>
         </div>
