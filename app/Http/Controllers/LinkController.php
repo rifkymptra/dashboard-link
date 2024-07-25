@@ -7,17 +7,22 @@ use App\Models\Link;
 
 class LinkController extends Controller
 {
-    public function index()
+    public function search(Request $request)
     {
-        $links = Link::paginate(10);
-        return view('links.index', compact('links'));
-    }
+        $query = $request->input('search');
 
-    public function fetchData(Request $request)
-    {
+        $links = Link::where('link_name', 'like', "%$query%")
+            ->orWhere('description_link', 'like', "%$query%")
+            ->orWhere('url', 'like', "%$query%")
+            ->orWhereHas('submittedBy.section', function ($q) use ($query) {
+                $q->where('section_name', 'like', "%$query%");
+            })
+            ->paginate(10);
+
         if ($request->ajax()) {
-            $links = Link::paginate(10);
-            return view('links.pagination', compact('links'))->render();
+            return view('partials.links', compact('links'))->render();
         }
+
+        return view('link', compact('links'));
     }
 }

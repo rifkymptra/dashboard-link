@@ -4,6 +4,7 @@ use App\Models\Link;
 use App\Models\Section;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LinkController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', function () {
@@ -27,6 +28,8 @@ Route::get('/link',  function () {
         'links' => Link::paginate(10)
     ]);
 });
+
+Route::get('/links/search', [LinkController::class, 'search'])->name('links.search');
 
 Route::get('/profile', function () {
     return view('profile', [
