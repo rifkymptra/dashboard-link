@@ -1,18 +1,18 @@
 <x-layout>
     <div class="container mx-auto px-4 py-8">
-        <h2>Beranda</h2>
+        <h2 class="">Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
         <div class="flex items-center mb-4">
             <input type="text" id="search" placeholder="Search..."
                 class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
-            <button
+            <a href="/link/create"
                 class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                 <span
                     class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                     Tambah Link
                 </span>
-            </button>
+            </a>
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
