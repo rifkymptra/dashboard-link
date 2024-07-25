@@ -47,7 +47,7 @@ class UserController extends Controller
     {
         $users = User::paginate(10);
         $sections = Section::all();
-        return view('kelolauser', compact('users'));
+        return view('kelolauser', compact('users', 'sections'));
     }
 
     // Menampilkan form untuk mengedit user
@@ -67,8 +67,13 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->all());
-        return redirect()->route('/users/kelola')->with('success', 'User updated successfully.');
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->section_id = $request->input('section_id');
+        $user->role = $request->input('role');
+        $user->save();
+
+        return response()->json(['success' => true]);
     }
 
     // Menghapus user
@@ -77,5 +82,24 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user->delete();
         return redirect()->route('/users/kelola')->with('success', 'User deleted successfully.');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+
+        $users = User::where('name', 'like', "%$query%")
+            ->orWhere('email', 'like', "%$query%")
+            ->orWhere('role', 'like', "%$query%")
+            ->orWhereHas('section', function ($q) use ($query) {
+                $q->where('section_name', 'like', "%$query%");
+            })
+            ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('partials.users', compact('users'))->render();
+        }
+
+        return view('kelolauser', compact('users'));
     }
 }

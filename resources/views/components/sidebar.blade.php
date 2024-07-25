@@ -1,5 +1,5 @@
 <div :class="open ? 'w-64' : 'w-0'"
-    class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-50 md:z-auto border-r border-gray-200 top-5">
+    class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-5">
     <nav class="mt-10 pt-8 transition-all duration-300" :class="open ? 'block' : 'hidden'">
         <a href="/beranda"
             class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
@@ -48,18 +48,47 @@
                 </a>
             </div>
         </div>
-        <a href="/link"
-            class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
-            @if (Request::is('link')) bg-gray-200 @endif">
-            <img src="{{ asset('svg/link.svg') }}" class="inline-block h-6 w-6 mr-3" />
-            <span :class="open ? 'inline' : 'hidden'">Link</span>
-        </a>
         <div x-data="{
-            openManage: '{{ Request::is('link/create', 'link/approval', 'users/create', 'users/kelola') ? 'true' : 'false' }}' === 'true'
+            openLink: '{{ Request::is('link', 'link/create') ? 'true' : 'false' }}' === 'true'
+        }">
+            <button @click="openLink = !openLink"
+                class="flex justify-between w-full py-2.5 px-4 transition duration-200 hover:bg-gray-200
+                    ">
+                <span class="flex items-center">
+                    <img src="{{ asset('svg/Link.svg') }}" class="inline-block h-6 w-6 mr-3" />
+                    <span :class="open ? 'inline' : 'hidden'">Link</span>
+                </span>
+                <img src="{{ asset('svg/chevron-down.svg') }}" :class="{ 'rotate-180': openLink }"
+                    class="h-5 w-5 transition-transform duration-800" />
+            </button>
+            <div x-show="openLink" class="pl-4">
+                <a href="/link"
+                    class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
+                        @if (Request::is('link')) bg-gray-200 @endif">
+                    <img src="{{ asset('svg/file-text.svg') }}" class="inline-block h-6 w-6 mr-3" />
+                    <span :class="open ? 'inline' : 'hidden'">Daftar</span>
+                </a>
+                <a href="/link/create"
+                    class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
+                        @if (Request::is('link/create')) bg-gray-200 @endif">
+                    <img src="{{ asset('svg/file-text.svg') }}" class="inline-block h-6 w-6 mr-3" />
+                    <span :class="open ? 'inline' : 'hidden'">Tambah</span>
+                </a>
+                <a href="/link/kelola"
+                    class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
+                        @if (Request::is('link/kelola')) bg-gray-200 @endif">
+                    <img src="{{ asset('svg/file-text.svg') }}" class="inline-block h-6 w-6 mr-3" />
+                    <span :class="open ? 'inline' : 'hidden'">Kelola</span>
+                </a>
+
+            </div>
+        </div>
+        <div x-data="{
+            openManage: '{{ Request::is('link/approval', 'users/create', 'users/kelola') ? 'true' : 'false' }}' === 'true'
         }">
             <button @click="openManage = !openManage"
                 class="flex justify-between w-full py-2.5 px-4 transition duration-200 hover:bg-gray-200
-                    @if (Request::is('link/create', 'link/approval', 'users/create', 'users/kelola')) bg-gray-200 @endif">
+                    ">
                 <span class="flex items-center">
                     <img src="{{ asset('svg/airplay.svg') }}" class="inline-block h-6 w-6 mr-3" />
                     <span :class="open ? 'inline' : 'hidden'">Manage</span>
@@ -68,12 +97,6 @@
                     class="h-5 w-5 transition-transform duration-800" />
             </button>
             <div x-show="openManage" class="pl-4">
-                <a href="/link/create"
-                    class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
-                        @if (Request::is('link/create')) bg-gray-200 @endif">
-                    <img src="{{ asset('svg/file-text.svg') }}" class="inline-block h-6 w-6 mr-3" />
-                    <span :class="open ? 'inline' : 'hidden'">Tambah Link</span>
-                </a>
                 <a href="/link/approval"
                     class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
                         @if (Request::is('link/approval')) bg-gray-200 @endif">

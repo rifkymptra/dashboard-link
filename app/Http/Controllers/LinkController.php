@@ -8,11 +8,18 @@ use Illuminate\Support\Facades\Auth;
 
 class LinkController extends Controller
 {
+    public function index()
+    {
+        $links = Link::where('status', 'approved')->paginate(10);
+        return view('link', compact('links'));
+    }
+
     public function search(Request $request)
     {
         $query = $request->input('search');
 
-        $links = Link::where('link_name', 'like', "%$query%")
+        $links = Link::where('status', 'approved')
+            ->where('link_name', 'like', "%$query%")
             ->orWhere('description_link', 'like', "%$query%")
             ->orWhere('url', 'like', "%$query%")
             ->orWhereHas('submittedBy.section', function ($q) use ($query) {
@@ -52,5 +59,31 @@ class LinkController extends Controller
         ]);
 
         return redirect()->route('links.create')->with('Sukses', 'Link berhasil diajukan!');
+    }
+
+    public function approval()
+    {
+        $links = Link::where('status', 'pending')->paginate(10);
+        return view('approval', compact('links'));
+    }
+
+    // Mengubah status link menjadi approved
+    public function accept($id)
+    {
+        $link = Link::findOrFail($id);
+        $link->status = 'approved';
+        $link->save();
+
+        return redirect()->route('links.approval')->with('Sukses', 'Link berhasil diterima!');
+    }
+
+    // Mengubah status link menjadi rejected
+    public function reject($id)
+    {
+        $link = Link::findOrFail($id);
+        $link->status = 'rejected';
+        $link->save();
+
+        return redirect()->route('links.approval')->with('Sukses', 'Link berhasil ditolak!');
     }
 }

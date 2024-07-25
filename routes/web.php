@@ -23,16 +23,13 @@ Route::get('/beranda', function () {
     ]);
 });
 
-Route::get('/link',  function () {
-    return view('link', [
-        'links' => Link::paginate(10)
-    ]);
-});
-
+Route::get('/link', [LinkController::class, 'index'])->name('links.index');
 Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
-
 Route::get('/link/create', [LinkController::class, 'create'])->name('links.create');
 Route::post('/link', [LinkController::class, 'store'])->name('links.store');
+Route::get('link/approval', [LinkController::class, 'approval'])->name('links.approval');
+Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->name('approval.accept');
+Route::post('/link/approval/{id}/reject', [LinkController::class, 'reject'])->name('approval.reject');
 
 Route::get('/profile', function () {
     return view('profile', [
@@ -50,6 +47,8 @@ Route::get('/profile', function () {
 
 Route::get('users/create', [UserController::class, 'create'])->name('users.create');
 Route::post('users', [UserController::class, 'store'])->name('users.store');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
 Route::get('users/kelola', [UserController::class, 'kelolaUser'])->name('users.kelolaUser');
 Route::resource('users', UserController::class);
