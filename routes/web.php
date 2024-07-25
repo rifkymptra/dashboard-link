@@ -29,7 +29,10 @@ Route::get('/link',  function () {
     ]);
 });
 
-Route::get('/links/search', [LinkController::class, 'search'])->name('links.search');
+Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
+
+Route::get('/link/create', [LinkController::class, 'create'])->name('links.create');
+Route::post('/link', [LinkController::class, 'store'])->name('links.store');
 
 Route::get('/profile', function () {
     return view('profile', [

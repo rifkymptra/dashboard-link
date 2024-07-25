@@ -8,6 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Link extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'section_id',
+        'link_name',
+        'url',
+        'description_link',
+        'submitted_by',
+        'approved_by',
+        'status'
+    ];
 
     public function sectionId()
     {
