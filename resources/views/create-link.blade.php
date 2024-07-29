@@ -6,19 +6,20 @@
             @csrf
             <div>
                 <label for="link_name" class="block text-sm font-medium text-gray-700">Judul Link</label>
-                <input type="text" id="link_name" name="link_name" required
+                <input type="text" id="link_name" name="link_name" required placeholder="ex: Badan Pusat Statistik"
                     class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full">
             </div>
 
             <div>
                 <label for="url" class="block text-sm font-medium text-gray-700">URL</label>
-                <input type="url" id="url" name="url" required
+                <input type="text" id="url" name="url" required placeholder="ex: bps.go.id"
                     class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full">
             </div>
 
             <div>
                 <label for="description_link" class="block text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="description_link" name="description_link" rows="4" required
+                    placeholder="ex: website tempat menyediakan informasi tentang data statistik dasar dan sektoral"
                     class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full"></textarea>
             </div>
 
@@ -34,34 +35,35 @@
         </form>
     </div>
 
-    <!-- Add meta tags for SweetAlert2 -->
-    <meta name="success-message" content="{{ session('success') }}">
-    <meta name="error-message" content="{{ session('error') }}">
-
-    <!-- Include SweetAlert2 JavaScript -->
-    <script src="{{ asset('node_modules/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+    <!-- Include SweetAlert2 JavaScript from realrashid/sweet-alert -->
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const successMessage = document.querySelector('meta[name="success-message"]').getAttribute('content');
-            const errorMessage = document.querySelector('meta[name="error-message"]').getAttribute('content');
-
-            if (successMessage) {
+            @if (session('success'))
                 Swal.fire({
                     icon: 'success',
                     title: 'Sukses',
-                    text: successMessage,
+                    text: "{{ session('success') }}",
                     confirmButtonText: 'OK'
                 });
-            }
+            @endif
 
-            if (errorMessage) {
+            @if (session('error'))
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
-                    text: errorMessage,
+                    text: "{{ session('error') }}",
                     confirmButtonText: 'OK'
                 });
+            @endif
+        });
+
+        document.getElementById('create-link-form').addEventListener('submit', function(event) {
+            var urlInput = document.getElementById('url');
+            var urlValue = urlInput.value.trim();
+            if (!urlValue.startsWith('http://') && !urlValue.startsWith('https://')) {
+                urlInput.value = 'https://' + urlValue;
             }
         });
     </script>

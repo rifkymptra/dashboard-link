@@ -60,8 +60,7 @@
     </div>
 
     <!-- Edit User Modal -->
-    <div id="edit-user-modal"
-        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
+    <div id="edit-user-modal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
         <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
             <h2 class="text-2xl font-bold mb-4">Edit User</h2>
             <form id="edit-user-form">

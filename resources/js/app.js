@@ -1,5 +1,5 @@
 import './bootstrap';
-import Swal from 'sweetalert2';
+import Swal from 'sweetalert2/dist/sweetalert2.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const successMessage = document.querySelector('meta[name="success-message"]').getAttribute('content');

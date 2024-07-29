@@ -3,27 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Link;
+use App\Models\Section;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LinkController extends Controller
 {
     public function index()
     {
+        $sections = Section::all();
         $links = Link::where('status', 'approved')->paginate(10);
-        return view('link', compact('links'));
+        return view('link', compact('links', 'sections'));
     }
 
     public function search(Request $request)
     {
         $query = $request->input('search');
+        $sectionIds = $request->input('sections', []);
 
         $links = Link::where('status', 'approved')
-            ->where('link_name', 'like', "%$query%")
-            ->orWhere('description_link', 'like', "%$query%")
-            ->orWhere('url', 'like', "%$query%")
-            ->orWhereHas('submittedBy.section', function ($q) use ($query) {
-                $q->where('section_name', 'like', "%$query%");
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($q) use ($query) {
+                    $q->where('link_name', 'like', "%$query%")
+                        ->orWhere('description_link', 'like', "%$query%")
+                        ->orWhere('url', 'like', "%$query%")
+                        ->orWhereHas('submittedBy.section', function ($q) use ($query) {
+                            $q->where('section_name', 'like', "%$query%");
+                        });
+                });
+            })
+            ->when($sectionIds, function ($q) use ($sectionIds) {
+                $q->whereHas('submittedBy.section', function ($q) use ($sectionIds) {
+                    $q->whereIn('id', $sectionIds);
+                });
             })
             ->paginate(10);
 
@@ -58,7 +71,9 @@ class LinkController extends Controller
             'status' => 'submitted',
         ]);
 
-        return redirect()->route('links.create')->with('Sukses', 'Link berhasil diajukan!');
+        Alert::success('Berhasil', 'Link berhasil ditambahkan.');
+
+        return redirect()->route('links.create');
     }
 
     public function approval()

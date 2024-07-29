@@ -1,6 +1,6 @@
 <div :class="open ? 'w-64' : 'w-0'"
     class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-5">
-    <nav class="mt-10 pt-8 transition-all duration-300" :class="open ? 'block' : 'hidden'">
+    <nav class="mt-10 pt-8 transition-all duration-300 w-64" :class="open ? 'block' : 'hidden'">
         <a href="/beranda"
             class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
             @if (Request::is('beranda')) bg-gray-200 @endif">

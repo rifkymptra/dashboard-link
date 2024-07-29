@@ -30,6 +30,7 @@ Route::post('/link', [LinkController::class, 'store'])->name('links.store');
 Route::get('link/approval', [LinkController::class, 'approval'])->name('links.approval');
 Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->name('approval.accept');
 Route::post('/link/approval/{id}/reject', [LinkController::class, 'reject'])->name('approval.reject');
+// Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
 Route::get('/profile', function () {
     return view('profile', [

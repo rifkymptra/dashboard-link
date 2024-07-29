@@ -10,6 +10,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+    @include('sweetalert::alert')
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jakarta+Sans:wght@400;700&display=swap">
     <title>Dashboard Link BPS Kota Solok</title>
 </head>
@@ -29,6 +30,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 </body>
 
 </html>
