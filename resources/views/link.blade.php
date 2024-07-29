@@ -18,12 +18,16 @@
                     x-transition:leave="transition ease-in duration-300"
                     x-transition:leave-start="opacity-100 transform translate-y-0"
                     x-transition:leave-end="opacity-0 transform -translate-y-4">
-                    @foreach ($sections as $section)
-                        <label class="inline-flex items-center">
-                            <input type="checkbox" name="sections[]" value="{{ $section->id }}" class="section-filter">
-                            <span class="ml-2">{{ $section->section_name }}</span>
-                        </label>
-                    @endforeach
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
+                        @foreach ($sections as $section)
+                            <label
+                                class="my-1 mx-2 flex items-center space-x-2 p-2 border rounded-lg shadow-sm hover:bg-gray-100">
+                                <input type="checkbox" name="sections[]" value="{{ $section->id }}"
+                                    class="section-filter">
+                                <span class="ml-2 text-sm font-medium">{{ $section->section_name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
                 </form>
             </div>
 
