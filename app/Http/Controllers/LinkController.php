@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Link;
 use App\Models\Section;
+use App\Exports\LinkExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -50,7 +51,8 @@ class LinkController extends Controller
     // Menampilkan form create link
     public function create()
     {
-        return view('create-link');
+        $sections = Section::all();
+        return view('create-link', compact('sections'));
     }
 
     // Menyimpan link ke database
@@ -60,25 +62,29 @@ class LinkController extends Controller
             'link_name' => 'required|string|max:255',
             'url' => 'required|url',
             'description_link' => 'required|string',
+            'vpn' => 'required|boolean',
+            'section_id' => 'required|exists:sections,id'
         ]);
+        try {
+            Link::create([
+                'link_name' => $request->link_name,
+                'url' => $request->url,
+                'description_link' => $request->description_link,
+                'vpn' => $request->vpn ? true : false,
+                'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
+                'submitted_by' => '1',
+                'status' => 'submitted',
+            ]);
 
-        Link::create([
-            'link_name' => $request->link_name,
-            'url' => $request->url,
-            'description_link' => $request->description_link,
-            'section_id' => '1', // Assuming section_id is from the logged-in user
-            'submitted_by' => '1',
-            'status' => 'submitted',
-        ]);
-
-        Alert::success('Berhasil', 'Link berhasil ditambahkan.');
-
-        return redirect()->route('links.create');
+            return redirect()->route('links.create')->with('success', 'Link berhasil diajukan.');
+        } catch (\Exception $e) {
+            return redirect()->route('links.create')->with('error', 'Link gagal diajukan: ' . $e->getMessage());
+        }
     }
 
     public function approval()
     {
-        $links = Link::where('status', 'pending')->paginate(10);
+        $links = Link::where('status', 'submitted')->paginate(10);
         return view('approval', compact('links'));
     }
 
@@ -100,5 +106,14 @@ class LinkController extends Controller
         $link->save();
 
         return redirect()->route('links.approval')->with('Sukses', 'Link berhasil ditolak!');
+    }
+
+    public function export()
+    {
+        $links = Link::with('submittedBy.section')->get(); // Ambil data link
+        $export = new LinkExport($links);
+        $filepath = $export->export();
+
+        return response()->download($filepath)->deleteFileAfterSend(true);
     }
 }

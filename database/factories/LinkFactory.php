@@ -22,10 +22,11 @@ class LinkFactory extends Factory
             'link_name' => fake()->word(),
             'url' => fake()->url(),
             'description_link' => fake()->sentence(),
+            'vpn' => fake()->boolean(),
             'section_id' => Section::all()->random()->id,
             'submitted_by' => User::all()->random()->id,
             'approved_by' => User::all()->random()->id,
-            'status' => fake()->randomElement(['pending', 'approved', 'rejected']),
+            'status' => fake()->randomElement(['submitted', 'approved', 'rejected']),
         ];
     }
 }

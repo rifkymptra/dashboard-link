@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('link_name');
             $table->string('url');
             $table->string('description_link');
+            $table->boolean('vpn')->default(false);
             $table->foreignId('submitted_by')->constrained(
                 table: 'users',
                 indexName: 'links_submitted_by_index'

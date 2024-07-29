@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SectionController;
 
 Route::get('/', function () {
     return view('login');
@@ -21,7 +22,7 @@ Route::get('/beranda', function () {
         'links' => Link::all(),
         'linkNew' => Link::where('status', 'pending')->count()
     ]);
-});
+})->name('beranda');
 
 Route::get('/link', [LinkController::class, 'index'])->name('links.index');
 Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
@@ -30,6 +31,8 @@ Route::post('/link', [LinkController::class, 'store'])->name('links.store');
 Route::get('link/approval', [LinkController::class, 'approval'])->name('links.approval');
 Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->name('approval.accept');
 Route::post('/link/approval/{id}/reject', [LinkController::class, 'reject'])->name('approval.reject');
+Route::get('/approval/search', [LinkController::class, 'searchApproval'])->name('approval.search');
+
 // Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
 Route::get('/profile', function () {
@@ -51,8 +54,14 @@ Route::post('users', [UserController::class, 'store'])->name('users.store');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
 Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
 
-Route::get('users/kelola', [UserController::class, 'kelolaUser'])->name('users.kelolaUser');
+Route::get('users/kelola', [UserController::class, 'kelolaUser'])->name('users.kelola');
 Route::resource('users', UserController::class);
 
 Route::get('/users/{id}/edit', [UserController::class, 'edit'])->name('users.edit');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
+
+
+Route::get('export-links', [LinkController::class, 'export']);
+
+Route::get('/sections/create', [SectionController::class, 'create'])->name('sections.create');
+Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');

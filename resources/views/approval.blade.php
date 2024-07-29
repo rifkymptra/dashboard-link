@@ -98,4 +98,95 @@
         </nav>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchLinks(query, sections) {
+                $.ajax({
+                    url: '{{ route('links.search') }}',
+                    method: 'GET',
+                    data: {
+                        search: query,
+                        sections: sections
+                    },
+                    success: function(response) {
+                        $('#links-table-body').html(response);
+                    }
+                });
+            }
+
+            $('#search').on('input', function() {
+                let query = $(this).val();
+                let sections = [];
+                $('.section-filter:checked').each(function() {
+                    sections.push($(this).val());
+                });
+                fetchLinks(query, sections);
+            });
+
+            $('.section-filter').on('change', function() {
+                let query = $('#search').val();
+                let sections = [];
+                $('.section-filter:checked').each(function() {
+                    sections.push($(this).val());
+                });
+                fetchLinks(query, sections);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('Sukses'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses!',
+                    text: '{{ session('Sukses') }}',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            @endif
+
+            const acceptForms = document.querySelectorAll('form[action*="accept"]');
+            const rejectForms = document.querySelectorAll('form[action*="reject"]');
+
+            acceptForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Anda akan menyetujui link ini.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, setujui!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            rejectForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Anda akan menolak link ini.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, tolak!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </x-layout>

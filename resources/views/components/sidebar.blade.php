@@ -7,7 +7,7 @@
             <img src="{{ asset('svg/home.svg') }}" class="inline-block h-6 w-6 mr-3" />
             <span :class="open ? 'inline' : 'hidden'">Beranda</span>
         </a>
-        <div x-data="{
+        {{-- <div x-data="{
             openSection: '{{ Request::is('Kategori/*') ? 'true' : 'false' }}' === 'true',
             openManage: '{{ Request::is('link/create', 'link/approval', 'users/create', 'users/kelola') ? 'true' : 'false' }}' === 'true'
         }">
@@ -47,7 +47,7 @@
                     <span :class="open ? 'inline' : 'hidden'">Ekonomi</span>
                 </a>
             </div>
-        </div>
+        </div> --}}
         <div x-data="{
             openLink: '{{ Request::is('link', 'link/create') ? 'true' : 'false' }}' === 'true'
         }">

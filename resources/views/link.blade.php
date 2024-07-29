@@ -30,6 +30,13 @@
             <div class="flex items-center mb-4">
                 <input type="text" id="search" placeholder="Search..."
                     class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
+                <a href="/export-links"
+                    class="ml-2 mt-2 relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                    <span
+                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                        Export Excel
+                    </span>
+                </a>
                 <a href="/link/create"
                     class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
                     <span
@@ -55,7 +62,11 @@
                                 class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                                 <th scope="row"
                                     class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $link->link_name }}
+                                    {{ $link->link_name }} @if ($link->vpn)
+                                        <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">
+                                            VPN!
+                                        </span>
+                                    @endif
                                 </th>
                                 <td class="px-6 py-4">{{ $link->description_link }}</td>
                                 <td class="px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
