@@ -33,6 +33,10 @@ Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->na
 Route::post('/link/approval/{id}/reject', [LinkController::class, 'reject'])->name('approval.reject');
 Route::get('/approval/search', [LinkController::class, 'searchApproval'])->name('approval.search');
 
+Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('links.edit');
+
+// Rute untuk memperbarui link
+Route::put('/links/update', [LinkController::class, 'update'])->name('links.update');
 // Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
 Route::get('/profile', function () {

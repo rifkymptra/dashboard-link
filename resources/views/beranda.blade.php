@@ -28,18 +28,19 @@
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
             <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
-            <x-summary-card icon="svg/file-plus.svg" title="Link Baru" description="{{ count($links) }}" />
+            <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
+                description="{{ count($links->where('status', 'submitted')) }}" />
         </div>
 
         <!-- Pintasan Section -->
         <h2 class="text-2xl font-bold mt-10 mb-4">Pintasan</h2>
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-shortcut-card href="/beranda" icon="svg/airplay.svg" title="Seksi"
-                description="Seluruh seksi di BPS Kota Solok" />
-            <x-shortcut-card href="/beranda" icon="svg/link.svg" title="Link"
+            <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
                 description="Rangkuman link yang digunakan" />
-            <x-shortcut-card href="/beranda" icon="svg/book.svg" title="Manajemen"
-                description="Organisir link-link yang ada" />
+            <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
+                description="Pengajuan link yang belum disetujui" />
+            <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
+                description="Ajukan sebuah link baru!" />
         </div>
 
 

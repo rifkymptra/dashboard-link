@@ -6,10 +6,9 @@
         <!-- Filter Section -->
         <div class="mb-4" x-data="{ openFilter: false }">
             <div class="mb-4">
-                <div class="inline-flex items-center cursor-pointer " @click="openFilter = !openFilter">
+                <div class="inline-flex items-center cursor-pointer" @click="openFilter = !openFilter">
                     <h3 class="text-base font-semibold">Filter berdasarkan kategori</h3>
-                    <img :class="{ '-rotate-90': openFilter, '-rotate-90': !openFilter }"
-                        src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
+                    <img :class="{ 'rotate-180': openFilter }" src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
                         class="h-6 w-6 transition-transform duration-300">
                 </div>
                 <form id="filter-form" x-show="openFilter" x-transition:enter="transition ease-out duration-300"
@@ -58,25 +57,23 @@
                             <th scope="col" class="px-6 py-3">Deskripsi</th>
                             <th scope="col" class="px-6 py-3">Kategori</th>
                             <th scope="col" class="px-6 py-3">URL</th>
+                            <th scope="col" class="px-6 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="links-table-body">
                         @foreach ($links as $link)
                             <tr
                                 class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <th scope="row"
-                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ $link->link_name }} @if ($link->vpn)
-                                        <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">
-                                            VPN!
-                                        </span>
-                                    @endif
-                                </th>
+                                <td class="px-6 py-4">{{ $link->link_name }}</td>
                                 <td class="px-6 py-4">{{ $link->description_link }}</td>
-                                <td class="px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
+                                <td class="px-6 py-4">{{ $link->sectionId->section_name }}</td>
                                 <td class="px-6 py-4">
                                     <a href="{{ $link->url }}"
                                         class="text-blue-600 hover:underline">{{ $link->url }}</a>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <button @click="editLink({{ $link->id }})"
+                                        class="font-medium text-blue-600 hover:underline">Edit</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -119,8 +116,57 @@
                     </li>
                 </ul>
             </nav>
-
         </div>
+
+        <!-- Edit Modal -->
+        <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
+            x-data="{ showEditModal: false }" x-show="showEditModal" @keydown.escape.window="showEditModal = false"
+            @click.outside="showEditModal = false; console.log('Modal closed');">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
+                <h3 class="text-xl font-bold mb-4">Edit Link</h3>
+                <form id="edit-form" method="POST" action="{{ route('links.update') }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="edit-link-id">
+                    <div class="mb-4">
+                        <label for="edit-link-name" class="block text-sm font-medium text-gray-700">Judul</label>
+                        <input type="text" name="link_name" id="edit-link-name"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-description-link"
+                            class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                        <textarea name="description_link" id="edit-description-link"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            rows="3" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-url" class="block text-sm font-medium text-gray-700">URL</label>
+                        <input type="text" name="url" id="edit-url"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
+                        <select name="section_id" id="edit-section"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            @foreach ($sections as $section)
+                                <option value="{{ $section->id }}">{{ $section->section_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Simpan</button>
+                        <button type="button" @click="showEditModal = false"
+                            class="ml-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">Batal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -136,6 +182,21 @@
                     },
                     success: function(response) {
                         $('#links-table-body').html(response);
+                    }
+                });
+            }
+
+            function fetchLinkData(id) {
+                $.ajax({
+                    url: '{{ url('links') }}/' + id + '/edit',
+                    method: 'GET',
+                    success: function(response) {
+                        $('#edit-link-id').val(response.id);
+                        $('#edit-link-name').val(response.link_name);
+                        $('#edit-description-link').val(response.description_link);
+                        $('#edit-url').val(response.url);
+                        $('#edit-section').val(response.section_id);
+                        $('#edit-modal').show();
                     }
                 });
             }
@@ -157,6 +218,26 @@
                 });
                 fetchLinks(query, sections);
             });
+
+            window.editLink = function(id) {
+                fetchLinkData(id);
+            };
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (Session::has('success'))
+                Swal.fire({
+                    title: 'Sukses',
+                    text: '{{ Session::get('success') }}',
+                    icon: 'success'
+                });
+            @elseif (Session::has('error'))
+                Swal.fire({
+                    title: 'Gagal',
+                    text: '{{ Session::get('error') }}',
+                    icon: 'error'
+                });
+            @endif
         });
     </script>
 </x-layout>
