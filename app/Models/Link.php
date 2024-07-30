@@ -12,6 +12,7 @@ class Link extends Model
         'section_id',
         'link_name',
         'url',
+        'vpn',
         'description_link',
         'submitted_by',
         'approved_by',

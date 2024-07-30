@@ -10,8 +10,14 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jakarta+Sans:wght@400;700&display=swap">
-    <title>Dashboard Link BPS Kota Solok</title>
+    @include('sweetalert::alert')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+        rel="stylesheet">
+    <title>DataLink Explorer</title>
+    <link rel="shortcut icon" href="{{ asset('bps_logo.png') }}">
 </head>
 
 <body class="bg-gray-100 font-sans antialiased">
@@ -29,6 +35,7 @@
             </div>
         </div>
     </div>
+    <script src="{{ mix('js/app.js') }}"></script>
 </body>
 
 </html>

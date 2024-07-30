@@ -32,15 +32,19 @@ class UserController extends Controller
             'role' => 'required|in:user,admin',
         ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'section_id' => $request->section_id,
-            'role' => $request->role,
-        ]);
+        try {
+            User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+                'section_id' => $request->section_id,
+                'role' => $request->role,
+            ]);
 
-        return redirect()->route('/beranda')->with('success', 'User created successfully.');
+            return redirect()->route('beranda')->with('success', 'User created successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->withErrors(['error' => 'Gagal membuat akun.']);
+        }
     }
 
     public function kelolaUser()
@@ -81,7 +85,7 @@ class UserController extends Controller
     {
         $user = User::findOrFail($id);
         $user->delete();
-        return redirect()->route('/users/kelola')->with('success', 'User deleted successfully.');
+        return redirect()->route('users.kelola')->with('success', 'User deleted successfully.');
     }
 
     public function search(Request $request)

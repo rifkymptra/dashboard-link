@@ -55,4 +55,27 @@
             </div>
         </form>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle successful creation
+            @if (session('success'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses',
+                    text: 'Berhasil membuat akun baru.',
+                    text: '{{ session('success') }}'
+                });
+            @endif
+
+            // Handle validation errors
+            @if ($errors->any())
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal',
+                    text: 'Terjadi kesalahan dalam pengisian form.',
+                    footer: '<ul>@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>'
+                });
+            @endif
+        });
+    </script>
 </x-layout>

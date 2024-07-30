@@ -32,8 +32,12 @@
                         <tr
                             class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
                             <th scope="row"
-                                class="px-2 sm:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $link->link_name }}
+                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $link->link_name }} @if ($link->vpn)
+                                    <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">
+                                        VPN!
+                                    </span>
+                                @endif
                             </th>
                             <td class="px-2 sm:px-6 py-4">{{ $link->description_link }}</td>
                             <td class="px-2 sm:px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
@@ -98,4 +102,95 @@
         </nav>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function fetchLinks(query, sections) {
+                $.ajax({
+                    url: '{{ route('links.search') }}',
+                    method: 'GET',
+                    data: {
+                        search: query,
+                        sections: sections
+                    },
+                    success: function(response) {
+                        $('#links-table-body').html(response);
+                    }
+                });
+            }
+
+            $('#search').on('input', function() {
+                let query = $(this).val();
+                let sections = [];
+                $('.section-filter:checked').each(function() {
+                    sections.push($(this).val());
+                });
+                fetchLinks(query, sections);
+            });
+
+            $('.section-filter').on('change', function() {
+                let query = $('#search').val();
+                let sections = [];
+                $('.section-filter:checked').each(function() {
+                    sections.push($(this).val());
+                });
+                fetchLinks(query, sections);
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            @if (session('Sukses'))
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sukses!',
+                    text: '{{ session('Sukses') }}',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            @endif
+
+            const acceptForms = document.querySelectorAll('form[action*="accept"]');
+            const rejectForms = document.querySelectorAll('form[action*="reject"]');
+
+            acceptForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Anda akan menyetujui link ini.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, setujui!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+
+            rejectForms.forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    Swal.fire({
+                        title: 'Apakah Anda yakin?',
+                        text: "Anda akan menolak link ini.",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, tolak!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </x-layout>

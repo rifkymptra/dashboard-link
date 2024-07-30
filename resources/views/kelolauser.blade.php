@@ -2,56 +2,83 @@
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold mb-6">Daftar Akun</h1>
 
-        <div class="flex items-center mb-4">
-            <input type="text" id="search" placeholder="Search..."
-                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
-            <a href="/users/create"
-                class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                <span
-                    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                    Tambah Akun
-                </span>
-            </a>
+        <!-- Filter Section -->
+        <div class="mb-4" x-data="{ openFilter: false }">
+            <div class="flex items-center mb-4">
+                <input type="text" id="search" placeholder="Search..."
+                    class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
+                <a href="/users/create"
+                    class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200">
+                    <span
+                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white rounded-md group-hover:bg-opacity-0">
+                        Tambah Akun
+                    </span>
+                </a>
+            </div>
+
+            <div class="inline-flex items-center cursor-pointer" @click="openFilter = !openFilter">
+                <h3 class="text-base font-semibold">Filter berdasarkan kategori</h3>
+                <img :class="{ '-rotate-90': openFilter, 'rotate-0': !openFilter }"
+                    src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
+                    class="h-6 w-6 transition-transform duration-300 ml-2">
+            </div>
+            <form id="filter-form" x-show="openFilter" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform -translate-y-4"
+                x-transition:enter-end="opacity-100 transform translate-y-0"
+                x-transition:leave="transition ease-in duration-300"
+                x-transition:leave-start="opacity-100 transform translate-y-0"
+                x-transition:leave-end="opacity-0 transform -translate-y-4"
+                class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                @foreach ($sections as $section)
+                    <label class="flex items-center space-x-2 p-2 border rounded-lg shadow-sm hover:bg-gray-100">
+                        <input type="checkbox" name="sections[]" value="{{ $section->id }}" class="section-filter">
+                        <span class="text-sm font-medium">{{ $section->section_name }}</span>
+                    </label>
+                @endforeach
+            </form>
         </div>
 
-        <table class="w-full bg-white border border-gray-200">
-            <thead>
-                <tr>
-                    <th class="px-4 py-2 border-b">Name</th>
-                    <th class="px-4 py-2 border-b">Email</th>
-                    <th class="px-4 py-2 border-b">Seksi</th>
-                    <th class="px-4 py-2 border-b">Role</th>
-                    <th class="px-4 py-2 border-b">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($users as $user)
+        <!-- User Table -->
+        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            <table class="w-full text-sm text-left text-black bg-white border border-gray-200">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
-                        <td class="px-4 py-2 border-b">{{ $user->name }}</td>
-                        <td class="px-4 py-2 border-b">{{ $user->email }}</td>
-                        <td class="px-4 py-2 border-b">{{ $user->section->section_name }}</td>
-                        <td class="px-4 py-2 border-b">{{ $user->role }}</td>
-                        <td class="px-4 py-2 border-b flex space-x-2">
-                            <!-- Edit Button -->
-                            <button
-                                onclick="openEditModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}', '{{ $user->section->id }}', '{{ $user->role }}')"
-                                class="text-blue-600 hover:text-blue-800">
-                                <img src="{{ asset('svg/edit-biru.svg') }}" alt="" class="w-6 h-6">
-                            </button>
-                            <!-- Delete Button -->
-                            <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-800">
-                                    <img src="{{ asset('svg/x-merah.svg') }}" alt="w-6 h-6">
-                                </button>
-                            </form>
-                        </td>
+                        <th class="px-4 py-2 border-b">Nama</th>
+                        <th class="px-4 py-2 border-b">Email</th>
+                        <th class="px-4 py-2 border-b">Seksi</th>
+                        <th class="px-4 py-2 border-b">Role</th>
+                        <th class="px-4 py-2 border-b">Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($users as $user)
+                        <tr class="odd:bg-white even:bg-gray-50 border-b">
+                            <td class="px-4 py-2">{{ $user->name }}</td>
+                            <td class="px-4 py-2">{{ $user->email }}</td>
+                            <td class="px-4 py-2">{{ $user->section->section_name }}</td>
+                            <td class="px-4 py-2">{{ $user->role }}</td>
+                            <td class="px-4 py-2 flex space-x-2">
+                                <!-- Edit Button -->
+                                <button
+                                    onclick="openEditModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}', '{{ $user->section->id }}', '{{ $user->role }}')"
+                                    class="text-blue-600 hover:text-blue-800">
+                                    <img src="{{ asset('svg/edit-biru.svg') }}" alt="Edit" class="w-6 h-6">
+                                </button>
+                                <!-- Delete Button -->
+                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this user?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-red-600 hover:text-red-800">
+                                        <img src="{{ asset('svg/x-merah.svg') }}" alt="Delete" class="w-6 h-6">
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
         <!-- Pagination Links -->
         <div class="mt-6">
@@ -60,9 +87,8 @@
     </div>
 
     <!-- Edit User Modal -->
-    <div id="edit-user-modal"
-        class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-1/3">
+    <div id="edit-user-modal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
             <h2 class="text-2xl font-bold mb-4">Edit User</h2>
             <form id="edit-user-form">
                 @csrf
@@ -132,25 +158,28 @@
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
                             'content'),
+                        'Accept': 'application/json',
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        name: formData.get('name'),
-                        email: formData.get('email'),
-                        section_id: formData.get('section_id'),
-                        role: formData.get('role'),
-                    }),
+                    body: JSON.stringify(Object.fromEntries(formData)),
                 })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.success) {
-                        closeEditModal();
-                        location.reload(); // Refresh the page to see the updated data
-                    } else {
-                        alert('Error updating user');
-                    }
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'User Updated',
+                        text: 'User details have been updated successfully!',
+                    }).then(() => {
+                        location.reload();
+                    });
                 })
-                .catch(error => console.error('Error:', error));
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Update Failed',
+                        text: 'An error occurred while updating the user.',
+                    });
+                });
         });
     </script>
 </x-layout>

@@ -8,5 +8,9 @@
         <td class="px-6 py-4">
             <a href="{{ $link->url }}" class="text-blue-600 hover:underline">{{ $link->url }}</a>
         </td>
+        <td class="px-6 py-4 text-right">
+            <button @click="editLink({{ $link->id }})"
+                class="font-medium text-blue-600 hover:underline">Edit</button>
+        </td>
     </tr>
 @endforeach
