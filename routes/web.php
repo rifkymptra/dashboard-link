@@ -2,11 +2,24 @@
 
 use App\Models\Link;
 use App\Models\Section;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__ . '/auth.php';
 
 Route::get('/', function () {
     return view('login');
@@ -14,7 +27,12 @@ Route::get('/', function () {
 
 Route::get('/login', function () {
     return view('login');
-});
+})->name('login');
+
+Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+
+// Logout route
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
 Route::get('/beranda', function () {
     return view('beranda', [
@@ -22,9 +40,9 @@ Route::get('/beranda', function () {
         'links' => Link::all(),
         'linkNew' => Link::where('status', 'pending')->count()
     ]);
-})->name('beranda');
+})->name('beranda')->middleware('auth');
 
-Route::get('/link', [LinkController::class, 'index'])->name('links.index');
+Route::get('/link', [LinkController::class, 'index'])->name('links.index')->middleware('auth');;
 Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
 Route::get('/link/create', [LinkController::class, 'create'])->name('links.create');
 Route::post('/link', [LinkController::class, 'store'])->name('links.store');

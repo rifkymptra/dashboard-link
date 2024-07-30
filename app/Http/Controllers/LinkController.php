@@ -72,7 +72,7 @@ class LinkController extends Controller
                 'description_link' => $request->description_link,
                 'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
-                'submitted_by' => '1',
+                'submitted_by' => '2',
                 'status' => 'submitted',
             ]);
 

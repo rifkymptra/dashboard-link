@@ -22,10 +22,9 @@
             <!-- Right side -->
             <div class="flex items-center lg:order-2">
 
-
                 <h2
                     class="relative text-black rounded-lg text-blue hover:shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:rotate-1 ">
-                    <span class="text-xs sm:text-sm lg:text-base">Halo, Rifky Maulana Putra!</span>
+                    <span class="text-xs sm:text-sm lg:text-base">Halo, {{ Auth::user()->name }}</span>
                     <span class="absolute inset-0 from-pink-300 to-orange-300 opacity-25 rounded-lg -z-10"></span>
                 </h2>
 
@@ -43,10 +42,10 @@
                         class="absolute right-0 mt-2 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
                         id="dropdown" style="display: none;">
                         <div class="py-3 px-4">
-                            <span class="block text-sm font-semibold text-gray-900 dark:text-white">Neil
-                                Sims</span>
                             <span
-                                class="block text-sm text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                                class="block text-sm font-semibold text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
+                            <span
+                                class="block text-sm text-gray-500 truncate dark:text-gray-400">{{ Auth::user()->email }}</span>
                         </div>
                         <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
                             <li>
@@ -57,9 +56,13 @@
                         </ul>
                         <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
                             <li>
-                                <a href="#"
-                                    class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign
-                                    out</a>
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+                                    <button type="submit"
+                                        class="block w-full py-2 px-4 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">
+                                        Sign out
+                                    </button>
+                                </form>
                             </li>
                         </ul>
                     </div>
