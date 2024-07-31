@@ -28,8 +28,10 @@
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
             <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
-            <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
-                description="{{ count($links->where('status', 'submitted')) }}" />
+            @if (auth()->user()->role === 'admin')
+                <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
+                    description="{{ count($links->where('status', 'submitted')) }}" />
+            @endif
         </div>
 
         <!-- Pintasan Section -->
@@ -37,8 +39,14 @@
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
                 description="Rangkuman link yang digunakan" />
-            <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
-                description="Pengajuan link yang belum disetujui" />
+            @if (auth()->user()->role === 'admin')
+                <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
+                    description="Pengajuan link yang belum disetujui" />
+            @endif
+            @if (auth()->user()->role === 'user')
+                <x-shortcut-card href="/profile" icon="svg/users.svg" title="Profile"
+                    description="Edit profil & ganti password" />
+            @endif
             <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
                 description="Ajukan sebuah link baru!" />
         </div>

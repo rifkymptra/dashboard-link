@@ -58,6 +58,7 @@ class LinkController extends Controller
     // Menyimpan link ke database
     public function store(Request $request)
     {
+        $user = Auth::user();
         $request->validate([
             'link_name' => 'required|string|max:255',
             'url' => 'required|url',
@@ -72,7 +73,7 @@ class LinkController extends Controller
                 'description_link' => $request->description_link,
                 'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
-                'submitted_by' => '2',
+                'submitted_by' => $user->id,
                 'status' => 'submitted',
             ]);
 
@@ -91,8 +92,10 @@ class LinkController extends Controller
     // Mengubah status link menjadi approved
     public function accept($id)
     {
+        $user = Auth::user();
         $link = Link::findOrFail($id);
         $link->status = 'approved';
+        $link->approved_by = $user->id;
         $link->save();
 
         return redirect()->route('links.approval')->with('Sukses', 'Link berhasil diterima!');
@@ -101,8 +104,10 @@ class LinkController extends Controller
     // Mengubah status link menjadi rejected
     public function reject($id)
     {
+        $user = Auth::user();
         $link = Link::findOrFail($id);
         $link->status = 'rejected';
+        $link->approved_by = $user->id;
         $link->save();
 
         return redirect()->route('links.approval')->with('Sukses', 'Link berhasil ditolak!');

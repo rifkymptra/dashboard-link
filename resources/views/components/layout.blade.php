@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="viewport" content="width=
-    , initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite('resources/css/app.css')
@@ -24,10 +23,8 @@
     <div x-data="{ open: window.innerWidth >= 768 }">
         <x-header></x-header>
 
-
         <div @resize.window="open = window.innerWidth >= 768" @toggle-sidebar.window="open = !open" class="flex">
-            <x-sidebar></x-sidebar>
-
+            <x-sidebar x-show="open"></x-sidebar>
 
             <!-- Content -->
             <div class="flex-1 p-4 bg-white pt-20">
