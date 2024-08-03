@@ -27,10 +27,11 @@
         <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
-            <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
+            <x-summary-card icon="svg/link.svg" title="Jumlah Link"
+                description="{{ count($linksBySection->flatten()) }}" />
             @if (auth()->user()->role === 'admin')
                 <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
-                    description="{{ count($links->where('status', 'submitted')) }}" />
+                    description="{{ count($linksBySection->where('status', 'submitted')) }}" />
             @endif
         </div>
 
@@ -51,6 +52,74 @@
                 description="Ajukan sebuah link baru!" />
         </div>
 
+        <!-- Grafik Section -->
+        <h2 class="text-2xl font-bold mt-10 mb-4">Grafik</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bar Chart for Links by Section -->
+            <div class="bg-white p-4 shadow rounded-lg">
+                <canvas id="linksBySectionChart"></canvas>
+            </div>
 
+            <!-- Line Chart for Monthly Link Trends -->
+            <div class="bg-white p-4 shadow rounded-lg">
+                <canvas id="monthlyLinkTrendsChart"></canvas>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data for Links by Section Bar Chart
+            const linksBySectionCtx = document.getElementById('linksBySectionChart').getContext('2d');
+            new Chart(linksBySectionCtx, {
+                type: 'bar',
+                data: {
+                    labels: @json($linksBySection->keys()),
+                    datasets: [{
+                        label: 'Jumlah Link',
+                        data: @json($linksBySection->values()),
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Data for Monthly Link Trends Line Chart
+            const monthlyLinkTrendsCtx = document.getElementById('monthlyLinkTrendsChart').getContext('2d');
+            new Chart(monthlyLinkTrendsCtx, {
+                type: 'line',
+                data: {
+                    labels: @json($monthlyLinkCounts->pluck('month')),
+                    datasets: [{
+                        label: 'Jumlah Link per Bulan',
+                        data: @json($monthlyLinkCounts->pluck('count')),
+                        fill: false,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </x-layout>

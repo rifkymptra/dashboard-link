@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\BerandaController;
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -18,13 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/beranda', function () {
-        return view('beranda', [
-            'sections' => Section::all(),
-            'links' => Link::all(),
-            'linkNew' => Link::where('status', 'pending')->count()
-        ]);
-    })->name('beranda');
+    Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda.index');
 
     Route::get('/link', [LinkController::class, 'index'])->name('links.index');
     Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
