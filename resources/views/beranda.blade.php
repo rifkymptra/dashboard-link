@@ -27,11 +27,10 @@
         <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
         <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
             <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
-            <x-summary-card icon="svg/link.svg" title="Jumlah Link"
-                description="{{ count($linksBySection->flatten()) }}" />
+            <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
             @if (auth()->user()->role === 'admin')
                 <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
-                    description="{{ count($linksBySection->where('status', 'submitted')) }}" />
+                    description="{{ count($links->where('status', 'submitted')) }}" />
             @endif
         </div>
 
