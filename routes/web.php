@@ -30,6 +30,9 @@ Route::middleware(['admin'])->group(function () {
     Route::post('users', [UserController::class, 'store'])->name('users.store');
     Route::put('/users/{id}', [UserController::class, 'update'])->name('users.update');
     Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+
+    Route::get('/sections/create', [SectionController::class, 'create'])->name('sections.create');
+    Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');
 });
 
 Route::middleware('auth')->group(function () {
@@ -49,9 +52,6 @@ Route::middleware('auth')->group(function () {
     // Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
     Route::get('export-links', [LinkController::class, 'export']);
-
-    Route::get('/sections/create', [SectionController::class, 'create'])->name('sections.create');
-    Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');
 });
 
 require __DIR__ . '/auth.php';

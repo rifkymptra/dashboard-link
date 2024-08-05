@@ -1,6 +1,6 @@
 <div x-data="{ open: true }" @toggle-sidebar.window="open = $event.detail.open" :class="open ? 'w-64' : 'w-0'"
     class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-5">
-    <nav class="mt-10 pt-8 transition-all duration-300 w-64" :class="open ? 'block' : 'hidden'">
+    <nav class="mt-10 pt-8 transition-all duration-300 w-64 md:fixed" :class="open ? 'block' : 'hidden'">
         <a href="/beranda"
             class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
             @if (Request::is('beranda')) bg-gray-200 @endif">
@@ -35,7 +35,7 @@
 
         <!-- Only show this section if the user is an admin -->
         @if (auth()->user()->role === 'admin')
-            <div x-data="{ openManage: '{{ Request::is('users/create', 'users/kelola') ? 'true' : 'false' }}' === 'true' }">
+            <div x-data="{ openManage: '{{ Request::is('users/create', 'users/kelola', 'sections/create') ? 'true' : 'false' }}' === 'true' }">
                 <button @click="openManage = !openManage"
                     class="flex justify-between w-full py-2.5 px-4 transition duration-200 hover:bg-gray-200">
                     <span class="flex items-center">
@@ -57,6 +57,12 @@
                         @if (Request::is('users/kelola')) bg-gray-200 @endif">
                         <img src="{{ asset('svg/edit.svg') }}" class="inline-block h-6 w-6 mr-3" />
                         <span :class="open ? 'inline' : 'hidden'">Kelola Akun</span>
+                    </a>
+                    <a href="/sections/create"
+                        class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200 border-l border-black
+                        @if (Request::is('sections/create')) bg-gray-200 @endif">
+                        <img src="{{ asset('svg/user-plus.svg') }}" class="inline-block h-6 w-6 mr-3" />
+                        <span :class="open ? 'inline' : 'hidden'">Buat Kategori</span>
                     </a>
                 </div>
             </div>
