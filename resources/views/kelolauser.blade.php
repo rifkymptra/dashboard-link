@@ -18,7 +18,7 @@
 
             <div class="inline-flex items-center cursor-pointer" @click="openFilter = !openFilter">
                 <h3 class="text-base font-semibold">Filter berdasarkan kategori</h3>
-                <img :class="{ '-rotate-90': openFilter, 'rotate-0': !openFilter }"
+                <img :class="{ '-rotate-0': openFilter, '-rotate-90': !openFilter }"
                     src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
                     class="h-6 w-6 transition-transform duration-300 ml-2">
             </div>
@@ -39,7 +39,8 @@
         </div>
 
         <!-- User Table -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <div id="user-table-container" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            @include('partials.users', ['users' => $users])
             <table class="w-full text-sm text-left text-black bg-white border border-gray-200">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                     <tr>
@@ -180,6 +181,31 @@
                         text: 'An error occurred while updating the user.',
                     });
                 });
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search');
+            const filterForm = document.getElementById('filter-form');
+            const userTableContainer = document.getElementById('user-table-container');
+
+            function fetchData() {
+                const search = searchInput.value;
+                const formData = new FormData(filterForm);
+                formData.append('search', search);
+
+                fetch('{{ route('users.kelola') }}?' + new URLSearchParams(formData).toString(), {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        userTableContainer.innerHTML = data;
+                    });
+            }
+
+            searchInput.addEventListener('input', fetchData);
+            filterForm.addEventListener('change', fetchData);
         });
     </script>
 </x-layout>
