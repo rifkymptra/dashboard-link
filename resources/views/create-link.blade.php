@@ -61,9 +61,6 @@
         </form>
     </div>
 
-    <!-- Include SweetAlert2 JavaScript from realrashid/sweet-alert -->
-    <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             @if (session('success'))

@@ -3,7 +3,22 @@
         <h2>Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
-        <!-- Pengumuman Section -->
+
+        <!-- Grafik Section -->
+        {{-- <h2 class="text-2xl font-bold mt-10 mb-4">Grafik</h2> --}}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Bar Chart for Links by Section -->
+            <div class="bg-white p-4 shadow rounded-lg">
+                <canvas id="linksBySectionChart"></canvas>
+            </div>
+
+            <!-- Line Chart for Monthly Link Trends -->
+            <div class="bg-white p-4 shadow rounded-lg">
+                <canvas id="monthlyLinkTrendsChart"></canvas>
+            </div>
+        </div>
+    </div>
+    {{-- <!-- Pengumuman Section -->
         <div class="bg-blue-100 border-t-4 border-blue-500 rounded-b text-blue-900 px-4 py-3 shadow-md" role="alert">
             <div class="flex">
                 <div class="py-1">
@@ -21,50 +36,37 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
-        <!-- Rangkuman Section -->
-        <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
-            <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
-            @if (auth()->user()->role === 'admin')
-                <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
-                    description="{{ count($links->where('status', 'submitted')) }}" />
-            @endif
-        </div>
-
-        <!-- Pintasan Section -->
-        <h2 class="text-2xl font-bold mt-10 mb-4">Pintasan</h2>
-        <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
-                description="Rangkuman link yang digunakan" />
-            @if (auth()->user()->role === 'admin')
-                <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
-                    description="Pengajuan link yang belum disetujui" />
-            @endif
-            @if (auth()->user()->role === 'user')
-                <x-shortcut-card href="/profile" icon="svg/users.svg" title="Profile"
-                    description="Edit profil & ganti password" />
-            @endif
-            <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
-                description="Ajukan sebuah link baru!" />
-        </div>
-
-        <!-- Grafik Section -->
-        <h2 class="text-2xl font-bold mt-10 mb-4">Grafik</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Bar Chart for Links by Section -->
-            <div class="bg-white p-4 shadow rounded-lg">
-                <canvas id="linksBySectionChart"></canvas>
-            </div>
-
-            <!-- Line Chart for Monthly Link Trends -->
-            <div class="bg-white p-4 shadow rounded-lg">
-                <canvas id="monthlyLinkTrendsChart"></canvas>
-            </div>
-        </div>
+    <!-- Rangkuman Section -->
+    <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
+        <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
+        @if (auth()->user()->role === 'admin')
+            <x-summary-card icon="svg/file-plus.svg" title="Link Baru"
+                description="{{ count($links->where('status', 'submitted')) }}" />
+        @endif
     </div>
+
+    <!-- Pintasan Section -->
+    <h2 class="text-2xl font-bold mt-10 mb-4">Pintasan</h2>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
+            description="Rangkuman link yang digunakan" />
+        @if (auth()->user()->role === 'admin')
+            <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
+                description="Pengajuan link yang belum disetujui" />
+        @endif
+        @if (auth()->user()->role === 'user')
+            <x-shortcut-card href="/profile" icon="svg/users.svg" title="Profile"
+                description="Edit profil & ganti password" />
+        @endif
+        <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
+            description="Ajukan sebuah link baru!" />
+    </div>
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -76,7 +78,7 @@
                 data: {
                     labels: @json($linksBySection->keys()),
                     datasets: [{
-                        label: 'Jumlah Link',
+                        label: 'Jumlah Link Per Kategori',
                         data: @json($linksBySection->values()),
                         backgroundColor: 'rgba(54, 162, 235, 0.2)',
                         borderColor: 'rgba(54, 162, 235, 1)',

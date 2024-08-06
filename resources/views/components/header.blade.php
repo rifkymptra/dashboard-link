@@ -1,19 +1,22 @@
 <header class="antialiased border-b border-gray-200 fixed z-50 w-full">
-    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800" x-data="{ open: true }">
+    <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800" x-data="{ open: true }"
+        x-init="if (window.matchMedia('(max-width: 768px)').matches) {
+            open = false;
+        }">
         <div class="flex flex-wrap justify-between items-center">
             <!-- Left side -->
             <div class="flex justify-start items-center">
                 <!-- Toggle sidebar button (hidden on larger screens) -->
                 <button @click="open = !open; $dispatch('toggle-sidebar', { open: open })"
                     class="text-black focus:outline-none pr-2">
-                    <img x-show="open" src="{{ asset('svg/x.svg') }}" class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 w-4" />
+                    <img x-show="open" src="{{ asset('svg/x.svg') }}" class="lg:h-8 lg:w-8 sm:h-7 sm:w-7 h-6 w-6" />
                     <img x-show="!open" src="{{ asset('svg/align-left.svg') }}"
-                        class="lg:h-8 lg:w-8 sm:h-6 sm:w-6 h-4 w-4" />
+                        class="lg:h-8 lg:w-8 sm:h-7 sm:w-7 h-6 w-6" />
                 </button>
 
                 <!-- Logo and site title -->
                 <a href="/beranda" class="flex mr-4">
-                    <img src="{{ asset('bps_logo.png') }}" class="mr-3 h-8" alt="FlowBite Logo" />
+                    <img src="{{ asset('bps_logo.png') }}" class="mr-3 md:h-8 sm:h-7 h-6" alt="FlowBite Logo" />
                     <span
                         class="self-center sm:text-lg md:text-2xl text-sm font-semibold whitespace-nowrap dark:text-white">DataLink
                         Explorer</span>
@@ -23,7 +26,8 @@
             <div class="flex items-center lg:order-2">
                 <h2
                     class="relative text-black rounded-lg text-blue hover:shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:rotate-1">
-                    <span class="text-xs sm:text-sm lg:text-base">Halo, {{ Auth::user()->name }}</span>
+                    <span class="text-xs hidden sm:block md:block sm:text-sm lg:text-base">Halo,
+                        {{ Auth::user()->name }}</span>
                     <span class="absolute inset-0 from-pink-300 to-orange-300 opacity-25 rounded-lg -z-10"></span>
                 </h2>
 

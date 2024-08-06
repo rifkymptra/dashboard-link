@@ -1,4 +1,7 @@
-<div x-data="{ open: true }" @toggle-sidebar.window="open = $event.detail.open" :class="open ? 'w-64' : 'w-0'"
+<div x-data="{ open: true }" x-init="if (window.matchMedia('(max-width: 768px)').matches) {
+    open = false;
+}" @toggle-sidebar.window="open = $event.detail.open"
+    :class="open ? 'w-64' : 'w-0'"
     class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-5">
     <nav class="mt-10 pt-8 transition-all duration-300 w-64 md:fixed" :class="open ? 'block' : 'hidden'">
         <a href="/beranda"

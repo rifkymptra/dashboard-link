@@ -35,6 +35,18 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');
 });
 
+Route::middleware('guest')->group(function () {
+    Route::get('/', function () {
+        return view('login');
+    });
+
+    Route::get('/login', function () {
+        return view('login');
+    })->name('login');
+
+    Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
+});
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -52,19 +64,9 @@ Route::middleware('auth')->group(function () {
     // Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
     Route::get('export-links', [LinkController::class, 'export']);
+
+    // Logout route
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
 require __DIR__ . '/auth.php';
-
-Route::get('/', function () {
-    return view('login');
-});
-
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
-
-Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
-
-// Logout route
-Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');

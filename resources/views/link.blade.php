@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-8" x-data="{ showEditModal: false }">
         <h2 class="">Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
@@ -129,7 +129,7 @@
 
         <!-- Edit Modal -->
         <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
-            x-data="{ showEditModal: false }" x-show="showEditModal" @keydown.escape.window="showEditModal = false"
+            x-show="showEditModal" @keydown.escape.window="showEditModal = false"
             @click.outside="showEditModal = false; console.log('Modal closed');">
             <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
                 <h3 class="text-xl font-bold mb-4">Edit Link</h3>
@@ -157,6 +157,14 @@
                             required>
                     </div>
                     <div class="mb-4">
+                        <label for="edit-vpn" class="block text-sm font-medium text-gray-700">VPN</label>
+                        <select name="vpn" id="edit-vpn"
+                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
                         <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
                         <select name="section_id" id="edit-section"
                             class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -168,7 +176,7 @@
                     <div class="flex justify-end">
                         <button type="submit"
                             class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Simpan</button>
-                        <button type="button" @click="showEditModal = false; console.log(showEditModal)"
+                        <button type="button" @click="!showEditModal; console.log(showEditModal)" id="close_modal"
                             class="ml-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">Batal</button>
                     </div>
                 </form>
@@ -205,6 +213,7 @@
                         $('#edit-description-link').val(response.description_link);
                         $('#edit-url').val(response.url);
                         $('#edit-section').val(response.section_id);
+                        $('#edit-vpn').val(response.vpn);
                         $('#edit-modal').show();
                     }
                 });

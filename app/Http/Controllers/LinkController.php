@@ -131,6 +131,7 @@ class LinkController extends Controller
             'link_name' => $link->link_name,
             'description_link' => $link->description_link,
             'url' => $link->url,
+            'vpn' => $link->vpn,
             'section_id' => $link->section_id,
             'sections' => $sections,
         ]);
@@ -145,6 +146,7 @@ class LinkController extends Controller
                 'link_name' => 'required|string|max:255',
                 'description_link' => 'required|string|max:1000',
                 'url' => 'required|url',
+                'vpn' => 'required|boolean',
                 'section_id' => 'required|exists:sections,id',
             ]);
 
@@ -153,6 +155,7 @@ class LinkController extends Controller
                 'link_name' => $request->link_name,
                 'description_link' => $request->description_link,
                 'url' => $request->url,
+                'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id,
             ]);
 
