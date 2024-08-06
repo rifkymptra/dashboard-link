@@ -83,9 +83,24 @@ class LinkController extends Controller
         }
     }
 
-    public function approval()
+    public function approval(Request $request)
     {
-        $links = Link::where('status', 'submitted')->paginate(10);
+        $query = $request->get('search');
+
+        $links = Link::where('status', 'submitted')
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($q) use ($query) {
+                    $q->where('link_name', 'like', "%$query%")
+                        ->orWhere('description_link', 'like', "%$query%")
+                        ->orWhere('url', 'like', "%$query%");
+                });
+            })
+            ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('partials.approvals', compact('links'))->render();
+        }
+
         return view('approval', compact('links'));
     }
 
