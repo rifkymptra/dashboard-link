@@ -65,6 +65,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('export-links', [LinkController::class, 'export']);
 
+    Route::get('/pengajuan', [LinkController::class, 'approvalUser'])->name('approvaluser');
+
     // Logout route
     Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });

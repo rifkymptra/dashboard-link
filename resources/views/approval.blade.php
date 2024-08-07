@@ -38,18 +38,21 @@
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>
                             </td>
                             <td class="px-2 py-4 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                                <form action="{{ route('approval.accept', $link->id) }}" method="POST"
+                                <form id="approve-form-{{ $link->id }}"
+                                    action="{{ route('approval.accept', $link->id) }}" method="POST"
                                     class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setujui</button>
+                                        class="approveButton w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setujui</button>
                                 </form>
-                                <form action="{{ route('approval.reject', $link->id) }}" method="POST"
+                                <form id="reject-form-{{ $link->id }}"
+                                    action="{{ route('approval.reject', $link->id) }}" method="POST"
                                     class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
+                                        class="rejectButton w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
                                 </form>
+
                             </td>
                         </tr>
                     @endforeach
@@ -129,54 +132,119 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            @if (session('Sukses'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sukses!',
-                    text: '{{ session('Sukses') }}',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            @endif
+            document.querySelectorAll('.approveButton').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default form submission
 
-            const acceptForms = document.querySelectorAll('form[action*="accept"]');
-            const rejectForms = document.querySelectorAll('form[action*="reject"]');
+                    const formId = this.closest('form').id;
+                    const linkId = formId.split('-')[2];
 
-            acceptForms.forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Anda akan menyetujui link ini.",
-                        icon: 'warning',
+                        title: 'Catatan',
+                        input: 'textarea',
+                        inputPlaceholder: 'Masukkan catatanmu...',
+                        inputAttributes: {
+                            'aria-label': 'Masukkan catatanmu'
+                        },
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, setujui!',
-                        cancelButtonText: 'Batal'
+                        confirmButtonText: 'Approve',
+                        cancelButtonText: 'Cancel',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (note) => {
+                            return fetch(`/link/approval/${linkId}/accept`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                                'meta[name="csrf-token"]')
+                                            .getAttribute('content')
+                                    },
+                                    body: JSON.stringify({
+                                        note: note
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (!data.success) {
+                                        throw new Error(data.message);
+                                    }
+                                    return data;
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(
+                                        `Request failed: ${error.message}`);
+                                });
+                        }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            form.submit();
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Link diterima dan note telah ditambahkan.',
+                                icon: 'success'
+                            }).then(() => {
+                                // Optionally update the UI or refresh the page
+                                location
+                                    .reload(); // Refresh the page to see updated data
+                            });
                         }
                     });
                 });
             });
 
-            rejectForms.forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
+            document.querySelectorAll('.rejectButton').forEach(button => {
+                button.addEventListener('click', function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    const formId = this.closest('form').id;
+                    const linkId = formId.split('-')[2];
+
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Anda akan menolak link ini.",
-                        icon: 'warning',
+                        title: 'Catatan',
+                        input: 'textarea',
+                        inputPlaceholder: 'Masukkan catatanmu...',
+                        inputAttributes: {
+                            'aria-label': 'Masukkan catatanmu'
+                        },
                         showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, tolak!',
-                        cancelButtonText: 'Batal'
+                        confirmButtonText: 'Reject',
+                        cancelButtonText: 'Cancel',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (note) => {
+                            return fetch(`/link/approval/${linkId}/reject`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector(
+                                                'meta[name="csrf-token"]')
+                                            .getAttribute('content')
+                                    },
+                                    body: JSON.stringify({
+                                        note: note
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (!data.success) {
+                                        throw new Error(data.message);
+                                    }
+                                    return data;
+                                })
+                                .catch(error => {
+                                    Swal.showValidationMessage(
+                                        `Request failed: ${error.message}`);
+                                });
+                        }
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            form.submit();
+                            Swal.fire({
+                                title: 'Rejected!',
+                                text: 'Link berhasil ditolak dan note telah ditambahkan.',
+                                icon: 'error'
+                            }).then(() => {
+                                // Optionally update the UI or refresh the page
+                                location
+                                    .reload(); // Refresh the page to see updated data
+                            });
                         }
                     });
                 });

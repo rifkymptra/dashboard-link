@@ -75,6 +75,7 @@ class LinkController extends Controller
                 'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
                 'submitted_by' => $user->id,
                 'status' => 'submitted',
+                'note' => 'belum diperiksa',
             ]);
 
             return redirect()->route('links.create')->with('success', 'Link berhasil diajukan.');
@@ -105,27 +106,37 @@ class LinkController extends Controller
     }
 
     // Mengubah status link menjadi approved
-    public function accept($id)
+    public function accept(Request $request, $id)
     {
-        $user = Auth::user();
-        $link = Link::findOrFail($id);
-        $link->status = 'approved';
-        $link->approved_by = $user->id;
-        $link->save();
+        try {
+            $user = Auth::user();
+            $link = Link::findOrFail($id);
+            $link->status = 'approved';
+            $link->note = $request->note;
+            $link->approved_by = $user->id;
+            $link->save();
 
-        return redirect()->route('links.approval')->with('Sukses', 'Link berhasil diterima!');
+            return response()->json(['success' => true, 'message' => 'Link approved successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to approve link: ' . $e->getMessage()], 400);
+        }
     }
 
     // Mengubah status link menjadi rejected
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
-        $user = Auth::user();
-        $link = Link::findOrFail($id);
-        $link->status = 'rejected';
-        $link->approved_by = $user->id;
-        $link->save();
+        try {
+            $user = Auth::user();
+            $link = Link::findOrFail($id);
+            $link->status = 'rejected';
+            $link->note = $request->note;
+            $link->approved_by = $user->id;
+            $link->save();
 
-        return redirect()->route('links.approval')->with('Sukses', 'Link berhasil ditolak!');
+            return response()->json(['success' => true, 'message' => 'Link rejected successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Failed to reject link: ' . $e->getMessage()], 400);
+        }
     }
 
     public function export()
@@ -178,5 +189,23 @@ class LinkController extends Controller
         } catch (\Exception $e) {
             return redirect()->route('links.index')->with('error', 'Link gagal diperbarui: ' . $e->getMessage());
         }
+    }
+
+    // app/Http/Controllers/LinkController.php
+    public function approvalUser(Request $request)
+    {
+        // Ambil user yang sedang login
+        $user = auth()->user();
+
+        // Ambil link yang dikirimkan oleh user yang sedang login
+        $links = Link::where('submitted_by', $user->id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        if ($request->ajax()) {
+            return view('partials.links_table_user', compact('links'))->render();
+        }
+
+        return view('approvaluser', compact('links'));
     }
 }

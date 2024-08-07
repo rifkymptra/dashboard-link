@@ -77,6 +77,12 @@
                 <span :class="open ? 'inline' : 'hidden'">Approval</span>
             </a>
         @endif
+        <a href="/pengajuan"
+            class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
+            @if (Request::is('pengajuan')) bg-gray-200 @endif">
+            <img src="{{ asset('svg/users.svg') }}" class="inline-block h-6 w-6 mr-3" />
+            <span :class="open ? 'inline' : 'hidden'">Pengajuan</span>
+        </a>
         <a href="/profile"
             class="block py-2.5 px-4 transition duration-200 hover:bg-gray-200
             @if (Request::is('profile')) bg-gray-200 @endif">

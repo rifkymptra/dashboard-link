@@ -30,6 +30,7 @@ return new class extends Migration
                 indexName: 'links_approved_by_index'
             )->onDelete('set null');
             $table->string('status');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

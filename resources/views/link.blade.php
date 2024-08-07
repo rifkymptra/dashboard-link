@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="container mx-auto px-4 py-8" x-data="{ showEditModal: false }">
+    <div class="container px-4 py-8" x-data="{ showEditModal: false }">
         <h2 class="">Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
