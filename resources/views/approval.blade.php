@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-3 py-4 md:py-8">
         <h2 class="">Approval</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
@@ -10,13 +10,14 @@
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table
+                class="min-w-fit max-w-2 text-xs md:text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" class="px-2 py-3">Judul</th>
                         <th scope="col" class="px-2 py-3">Deskripsi</th>
                         <th scope="col" class="px-2 py-3">Kategori</th>
-                        <th scope="col" class="px-2 py-3">URL</th>
+                        <th scope="col" class="px-2 py-3 max-w-xs">URL</th>
                         <th scope="col" class="px-2 py-3">Aksi</th>
                     </tr>
                 </thead>
@@ -28,12 +29,13 @@
                                 class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{ $link->link_name }}
                                 @if ($link->vpn)
-                                    <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">VPN!</span>
+                                    <span
+                                        class="bg-cyan-400 p-1 text-[8px] md:text-[10px] font-bold rounded-full">VPN!</span>
                                 @endif
                             </th>
                             <td class="px-2 py-4">{{ $link->description_link }}</td>
                             <td class="px-2 py-4">{{ $link->submittedBy->section->section_name }}</td>
-                            <td class="px-2 py-4">
+                            <td class="px-2 py-4 max-w-xs">
                                 <a href="{{ $link->url }}"
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>
                             </td>
@@ -43,14 +45,14 @@
                                     class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="approveButton w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setujui</button>
+                                        class="approveButton text-xs md:text-sm w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full px-0 py-2 md:px-5 md:py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setuju</button>
                                 </form>
                                 <form id="reject-form-{{ $link->id }}"
                                     action="{{ route('approval.reject', $link->id) }}" method="POST"
                                     class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="rejectButton w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
+                                        class="rejectButton text-xs md:text-sm w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full px-3 py-2 md:px-5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
                                 </form>
 
                             </td>
@@ -108,9 +110,132 @@
                     },
                     success: function(response) {
                         $('#links-table-body').html(response);
+                        // Re-attach event listeners after content update
+                        attachEventListeners();
                     }
                 });
             }
+
+            function attachEventListeners() {
+                document.querySelectorAll('.approveButton').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formId = this.closest('form').id;
+                        const linkId = formId.split('-')[2];
+
+                        Swal.fire({
+                            title: 'Catatan',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan catatanmu...',
+                            inputAttributes: {
+                                'aria-label': 'Masukkan catatanmu'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Approve',
+                            cancelButtonText: 'Cancel',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (note) => {
+                                return fetch(`/link/approval/${linkId}/accept`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector(
+                                                    'meta[name="csrf-token"]')
+                                                .getAttribute('content')
+                                        },
+                                        body: JSON.stringify({
+                                            note: note
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (!data.success) {
+                                            throw new Error(data.message);
+                                        }
+                                        return data;
+                                    })
+                                    .catch(error => {
+                                        Swal.showValidationMessage(
+                                            `Request failed: ${error.message}`);
+                                    });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Link diterima dan note telah ditambahkan.',
+                                    icon: 'success'
+                                }).then(() => {
+                                    location
+                                        .reload(); // Refresh the page to see updated data
+                                });
+                            }
+                        });
+                    });
+                });
+
+                document.querySelectorAll('.rejectButton').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formId = this.closest('form').id;
+                        const linkId = formId.split('-')[2];
+
+                        Swal.fire({
+                            title: 'Catatan',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan catatanmu...',
+                            inputAttributes: {
+                                'aria-label': 'Masukkan catatanmu'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Reject',
+                            cancelButtonText: 'Cancel',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (note) => {
+                                return fetch(`/link/approval/${linkId}/reject`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector(
+                                                    'meta[name="csrf-token"]')
+                                                .getAttribute('content')
+                                        },
+                                        body: JSON.stringify({
+                                            note: note
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (!data.success) {
+                                            throw new Error(data.message);
+                                        }
+                                        return data;
+                                    })
+                                    .catch(error => {
+                                        Swal.showValidationMessage(
+                                            `Request failed: ${error.message}`);
+                                    });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Rejected!',
+                                    text: 'Link berhasil ditolak dan note telah ditambahkan.',
+                                    icon: 'error'
+                                }).then(() => {
+                                    location
+                                        .reload(); // Refresh the page to see updated data
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Initialize event listeners
+            attachEventListeners();
 
             $('#search').on('input', function() {
                 let query = $(this).val();
@@ -130,125 +255,6 @@
                 fetchLinks(query, sections);
             });
         });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.approveButton').forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    const formId = this.closest('form').id;
-                    const linkId = formId.split('-')[2];
-
-                    Swal.fire({
-                        title: 'Catatan',
-                        input: 'textarea',
-                        inputPlaceholder: 'Masukkan catatanmu...',
-                        inputAttributes: {
-                            'aria-label': 'Masukkan catatanmu'
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: 'Approve',
-                        cancelButtonText: 'Cancel',
-                        showLoaderOnConfirm: true,
-                        preConfirm: (note) => {
-                            return fetch(`/link/approval/${linkId}/accept`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector(
-                                                'meta[name="csrf-token"]')
-                                            .getAttribute('content')
-                                    },
-                                    body: JSON.stringify({
-                                        note: note
-                                    })
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (!data.success) {
-                                        throw new Error(data.message);
-                                    }
-                                    return data;
-                                })
-                                .catch(error => {
-                                    Swal.showValidationMessage(
-                                        `Request failed: ${error.message}`);
-                                });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Link diterima dan note telah ditambahkan.',
-                                icon: 'success'
-                            }).then(() => {
-                                // Optionally update the UI or refresh the page
-                                location
-                                    .reload(); // Refresh the page to see updated data
-                            });
-                        }
-                    });
-                });
-            });
-
-            document.querySelectorAll('.rejectButton').forEach(button => {
-                button.addEventListener('click', function(event) {
-                    event.preventDefault(); // Prevent default form submission
-
-                    const formId = this.closest('form').id;
-                    const linkId = formId.split('-')[2];
-
-                    Swal.fire({
-                        title: 'Catatan',
-                        input: 'textarea',
-                        inputPlaceholder: 'Masukkan catatanmu...',
-                        inputAttributes: {
-                            'aria-label': 'Masukkan catatanmu'
-                        },
-                        showCancelButton: true,
-                        confirmButtonText: 'Reject',
-                        cancelButtonText: 'Cancel',
-                        showLoaderOnConfirm: true,
-                        preConfirm: (note) => {
-                            return fetch(`/link/approval/${linkId}/reject`, {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': document.querySelector(
-                                                'meta[name="csrf-token"]')
-                                            .getAttribute('content')
-                                    },
-                                    body: JSON.stringify({
-                                        note: note
-                                    })
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (!data.success) {
-                                        throw new Error(data.message);
-                                    }
-                                    return data;
-                                })
-                                .catch(error => {
-                                    Swal.showValidationMessage(
-                                        `Request failed: ${error.message}`);
-                                });
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            Swal.fire({
-                                title: 'Rejected!',
-                                text: 'Link berhasil ditolak dan note telah ditambahkan.',
-                                icon: 'error'
-                            }).then(() => {
-                                // Optionally update the UI or refresh the page
-                                location
-                                    .reload(); // Refresh the page to see updated data
-                            });
-                        }
-                    });
-                });
-            });
-        });
     </script>
+
 </x-layout>

@@ -27,7 +27,7 @@
             <x-sidebar x-show="open"></x-sidebar>
 
             <!-- Content -->
-            <div class="flex-1 p-4 bg-white pt-20">
+            <div class="flex-1 px-0 md:px-4 bg-white pt-20">
                 {{ $slot }}
             </div>
         </div>
