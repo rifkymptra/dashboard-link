@@ -85,7 +85,10 @@
         document.getElementById('create-link-form').addEventListener('submit', function(event) {
             var urlInput = document.getElementById('url');
             var urlValue = urlInput.value.trim();
-            if (!urlValue.startsWith('http://') && !urlValue.startsWith('https://')) {
+            if (!urlValue.startsWith('http://') && !urlValue.startsWith('https://') && !urlValue.startsWith(
+                    'www.') && !urlValue.startsWith('https://www.') && !urlValue.startsWith('http://www.')) {
+                urlInput.value = 'https://www.' + urlValue;
+            } else if (urlValue.startsWith('www.')) {
                 urlInput.value = 'https://' + urlValue;
             }
         });
