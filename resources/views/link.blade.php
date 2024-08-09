@@ -80,7 +80,7 @@
                                 </td>
                                 @if (auth()->user()->role === 'admin')
                                     <td class="px-6 py-4 text-right">
-                                        <button @click="editLink({{ $link->id }})"
+                                        <button @click="editLink({{ $link->id }}); showEditModal = true;"
                                             class="font-medium text-blue-600 hover:underline">Edit</button>
                                     </td>
                                 @endif
@@ -92,32 +92,34 @@
 
             <nav aria-label="Page navigation example" class="py-8">
                 <ul class="flex items-center -space-x-px h-10 text-base">
-                    <!-- Pagination links here -->
+                    <!-- Previous Page Link -->
                     <li>
                         <a href="{{ $links->previousPageUrl() }}"
-                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700">
                             <span class="sr-only">Previous</span>
-                            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 6 10">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="M5 1 1 5l4 4" />
                             </svg>
                         </a>
                     </li>
+                    <!-- Pagination Links -->
                     @for ($i = 1; $i <= $links->lastPage(); $i++)
                         <li>
                             <a href="{{ $links->url($i) }}"
-                                class="flex items-center justify-center px-4 h-10 leading-tight {{ $links->currentPage() == $i ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
+                                class="flex items-center justify-center px-4 h-10 leading-tight {{ $links->currentPage() == $i ? 'text-blue-600 border border-blue-300 bg-blue-50' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700' }}">
                                 {{ $i }}
                             </a>
                         </li>
                     @endfor
+                    <!-- Next Page Link -->
                     <li>
                         <a href="{{ $links->nextPageUrl() }}"
-                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700">
                             <span class="sr-only">Next</span>
-                            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 6 10">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 6 10">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 9 4-4-4-4" />
                             </svg>
@@ -125,64 +127,66 @@
                     </li>
                 </ul>
             </nav>
+
         </div>
 
         <!-- Edit Modal -->
-        <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
-            x-show="showEditModal" @keydown.escape.window="showEditModal = false"
-            @click.outside="showEditModal = false; console.log('Modal closed');">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
-                <h3 class="text-xl font-bold mb-4">Edit Link</h3>
-                <form id="edit-form" method="POST" action="{{ route('links.update') }}">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="id" id="edit-link-id">
-                    <div class="mb-4">
-                        <label for="edit-link-name" class="block text-sm font-medium text-gray-700">Judul</label>
-                        <input type="text" name="link_name" id="edit-link-name"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="edit-description-link"
-                            class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea name="description_link" id="edit-description-link"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            rows="3" required></textarea>
-                    </div>
-                    <div class="mb-4">
-                        <label for="edit-url" class="block text-sm font-medium text-gray-700">URL</label>
-                        <input type="text" name="url" id="edit-url"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="edit-vpn" class="block text-sm font-medium text-gray-700">VPN</label>
-                        <select name="vpn" id="edit-vpn"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            <option value="1">Ya</option>
-                            <option value="0">Tidak</option>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
-                        <select name="section_id" id="edit-section"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                            @foreach ($sections as $section)
-                                <option value="{{ $section->id }}">{{ $section->section_name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Simpan</button>
-                        <button type="button" @click="!showEditModal; console.log(showEditModal)" id="close_modal"
-                            class="ml-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">Batal</button>
-                    </div>
-                </form>
+        @if (auth()->user()->role === 'admin')
+            <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
+                x-show="showEditModal" @keydown.escape.window="showEditModal = false"
+                @click.outside="showEditModal = false;">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg" @click.stop>
+                    <h3 class="text-xl font-bold mb-4">Edit Link</h3>
+                    <form id="edit-form" method="POST" action="{{ route('links.update') }}">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="id" id="edit-link-id">
+                        <div class="mb-4">
+                            <label for="edit-link-name" class="block text-sm font-medium text-gray-700">Judul</label>
+                            <input type="text" name="link_name" id="edit-link-name"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="edit-description-link"
+                                class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                            <textarea name="description_link" id="edit-description-link"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                rows="3" required></textarea>
+                        </div>
+                        <div class="mb-4">
+                            <label for="edit-url" class="block text-sm font-medium text-gray-700">URL</label>
+                            <input type="text" name="url" id="edit-url"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="edit-vpn" class="block text-sm font-medium text-gray-700">VPN</label>
+                            <select name="vpn" id="edit-vpn"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <option value="1">Ya</option>
+                                <option value="0">Tidak</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
+                            <select name="section_id" id="edit-section"
+                                class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}">{{ $section->section_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Simpan</button>
+                            <button type="button" @click="showEditModal = false"
+                                class="ml-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">Batal</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
-
+        @endif
 
     </div>
 
@@ -214,7 +218,7 @@
                         $('#edit-url').val(response.url);
                         $('#edit-section').val(response.section_id);
                         $('#edit-vpn').val(response.vpn);
-                        $('#edit-modal').show();
+                        showEditModal = true;
                     }
                 });
             }
@@ -241,6 +245,7 @@
                 fetchLinkData(id);
             };
         });
+
 
         document.addEventListener('DOMContentLoaded', function() {
             @if (Session::has('success'))

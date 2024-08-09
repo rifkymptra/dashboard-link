@@ -29,17 +29,22 @@ class LinkController extends Controller
                     $q->where('link_name', 'like', "%$query%")
                         ->orWhere('description_link', 'like', "%$query%")
                         ->orWhere('url', 'like', "%$query%")
-                        ->orWhereHas('submittedBy.section', function ($q) use ($query) {
+                        ->orWhere('vpn', 'like', "%$query%")
+                        ->orWhereHas('sectionId', function ($q) use ($query) {
                             $q->where('section_name', 'like', "%$query%");
                         });
                 });
             })
             ->when($sectionIds, function ($q) use ($sectionIds) {
-                $q->whereHas('submittedBy.section', function ($q) use ($sectionIds) {
+                $q->whereHas('sectionId', function ($q) use ($sectionIds) {
                     $q->whereIn('id', $sectionIds);
                 });
             })
-            ->paginate(10);
+            ->paginate(10)
+            ->appends([
+                'search' => $query,
+                'sections' => $sectionIds
+            ]);
 
         if ($request->ajax()) {
             return view('partials.links', compact('links'))->render();
@@ -93,7 +98,11 @@ class LinkController extends Controller
                 $q->where(function ($q) use ($query) {
                     $q->where('link_name', 'like', "%$query%")
                         ->orWhere('description_link', 'like', "%$query%")
-                        ->orWhere('url', 'like', "%$query%");
+                        ->orWhere('url', 'like', "%$query%")
+                        ->orWhere('vpn', 'like', "%$query%")
+                        ->orWhereHas('sectionId', function ($q) use ($query) {
+                            $q->where('section_name', 'like', "%$query%");
+                        });
                 });
             })
             ->paginate(10);

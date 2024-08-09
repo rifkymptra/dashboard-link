@@ -27,7 +27,7 @@ class BerandaController extends Controller
             ->get()
             ->map(function ($data) {
                 return [
-                    'month' => Carbon::create()->month($data->month)->format('F Y'),
+                    'month' => Carbon::create($data->year, $data->month, 1)->format('F Y'),
                     'count' => $data->count,
                 ];
             });

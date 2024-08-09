@@ -34,13 +34,21 @@
                                     <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">VPN!</span>
                                 @endif
                             </td>
-                            <td class="px-2 sm:px-6 py-4">{{ $link->description_link }}</td>
+                            <td class="px-2 sm:px-6 py-4 text-black">{{ $link->description_link }}</td>
                             <td class="px-2 sm:px-6 py-4">
                                 <a href="{{ $link->url }}"
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>
                             </td>
-                            <td class="px-2 sm:px-6 py-4">{{ $link->status }}</td>
-                            <td class="px-2 sm:px-6 py-4">{{ $link->note }}</td>
+                            <td class="px-2 sm:px-6 py-4 text-black ">
+                                <span
+                                    class=" px-2 py-1 font-semibold text-xs rounded-full flex justify-center
+                                {{ $link->status === 'approved' ? 'bg-blue-600' : '' }}
+                                {{ $link->status === 'rejected' ? 'bg-red-600' : '' }}
+                                {{ $link->status === 'submitted' ? 'bg-yellow-400' : '' }}">
+                                    {{ $link->status }}
+                                </span>
+                            </td>
+                            <td class="px-2 sm:px-6 py-4 text-black">{{ $link->note }}</td>
                         </tr>
                     @endforeach
                 </tbody>
