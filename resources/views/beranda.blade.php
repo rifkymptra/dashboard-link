@@ -45,6 +45,9 @@
             description="Ajukan sebuah link baru!" />
     </div>
 
+    {{-- Visitor Statistics --}}
+    <x-visitor-report />
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Gradient for Bar Chart

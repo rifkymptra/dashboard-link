@@ -5,10 +5,12 @@ use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VisitController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\BerandaController;
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -33,6 +35,9 @@ Route::middleware(['admin'])->group(function () {
 
     Route::get('/sections/create', [SectionController::class, 'create'])->name('sections.create');
     Route::post('/sections', [SectionController::class, 'store'])->name('sections.store');
+
+    Route::get('/reports', [ReportController::class, 'index']);
+    Route::get('/reports/{type}', [ReportController::class, 'getReport']);
 });
 
 Route::middleware('guest')->group(function () {
