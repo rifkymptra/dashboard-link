@@ -16,6 +16,8 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/', [BerandaController::class, 'index'])->name('beranda.index');
+
 Route::middleware(['admin'])->group(function () {
     Route::get('link/approval', [LinkController::class, 'approval'])->name('links.approval');
     Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->name('approval.accept');
@@ -38,13 +40,11 @@ Route::middleware(['admin'])->group(function () {
 
     Route::get('/reports', [ReportController::class, 'index']);
     Route::get('/reports/{type}', [ReportController::class, 'getReport']);
+    // Logout route
+    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 });
 
 Route::middleware('guest')->group(function () {
-    Route::get('/', function () {
-        return view('login');
-    });
-
     Route::get('/login', function () {
         return view('login');
     })->name('login');
@@ -52,28 +52,27 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 });
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// Route::middleware('auth')->group(function () {
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda.index');
+Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda.index');
 
-    Route::get('/link', [LinkController::class, 'index'])->name('links.index');
-    Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
-    Route::get('/link/create', [LinkController::class, 'create'])->name('links.create');
-    Route::post('/link', [LinkController::class, 'store'])->name('links.store');
+Route::get('/link', [LinkController::class, 'index'])->name('links.index');
+Route::get('/link/search', [LinkController::class, 'search'])->name('links.search');
+Route::get('/link/create', [LinkController::class, 'create'])->name('links.create');
+Route::post('/link', [LinkController::class, 'store'])->name('links.store');
 
-    // Rute untuk memperbarui link
-    Route::put('/links/update', [LinkController::class, 'update'])->name('links.update');
-    // Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
+// Rute untuk memperbarui link
+Route::put('/links/update', [LinkController::class, 'update'])->name('links.update');
+// Route::get('/link/manage', [LinkController::class, 'index'])->name('links.index');
 
-    Route::get('export-links', [LinkController::class, 'export']);
+Route::get('export-links', [LinkController::class, 'export']);
 
-    Route::get('/pengajuan', [LinkController::class, 'approvalUser'])->name('approvaluser');
+Route::get('/pengajuan', [LinkController::class, 'approvalUser'])->name('approvaluser');
 
-    // Logout route
-    Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
-});
+
+// });
 
 require __DIR__ . '/auth.php';

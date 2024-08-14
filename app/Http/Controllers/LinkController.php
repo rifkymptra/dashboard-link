@@ -78,7 +78,7 @@ class LinkController extends Controller
                 'description_link' => $request->description_link,
                 'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
-                'submitted_by' => $user->id,
+                'submitted_by' => $user->id ?? null,
                 'status' => 'submitted',
                 'note' => 'belum diperiksa',
             ]);
@@ -204,7 +204,7 @@ class LinkController extends Controller
     public function approvalUser(Request $request)
     {
         // Ambil user yang sedang login
-        $user = auth()->user();
+        $user = Auth::user();
 
         // Ambil link yang dikirimkan oleh user yang sedang login
         $links = Link::where('submitted_by', $user->id)

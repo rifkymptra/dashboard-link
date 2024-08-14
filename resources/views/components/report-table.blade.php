@@ -13,9 +13,9 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @php
-                    $startDate = Carbon\Carbon::now()->subDays(6);
+                    $startDate = Carbon\Carbon::now()->subDays(7);
                     $dates = [];
-                    for ($i = 0; $i < 7; $i++) {
+                    for ($i = 7; $i > 0; $i--) {
                         $dates[] = $startDate->copy()->addDays($i)->format('Y-m-d');
                     }
                 @endphp
@@ -60,9 +60,9 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
                 @php
-                    $startDate = Carbon\Carbon::now()->subDays(29);
+                    $startDate = Carbon\Carbon::now()->subDays(30);
                     $dates = [];
-                    for ($i = 0; $i < 30; $i++) {
+                    for ($i = 30; $i > 0; $i--) {
                         $dates[] = $startDate->copy()->addDays($i)->format('Y-m-d');
                     }
                 @endphp
@@ -111,7 +111,7 @@
                     ];
                     $startDate = Carbon\Carbon::now()->subYear();
                     $dates = [];
-                    for ($i = 0; $i < 12; $i++) {
+                    for ($i = 12; $i > 0; $i--) {
                         $dates[] = $startDate->copy()->addMonths($i);
                     }
                 @endphp

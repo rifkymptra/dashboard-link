@@ -24,52 +24,68 @@
             </div>
             <!-- Right side -->
             <div class="flex items-center lg:order-2">
-                <h2
-                    class="relative text-black rounded-lg text-blue hover:shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:rotate-1">
-                    <span class="text-xs hidden sm:block md:block sm:text-sm lg:text-base">Halo,
-                        {{ Auth::user()->name }}</span>
-                    <span class="absolute inset-0 from-pink-300 to-orange-300 opacity-25 rounded-lg -z-10"></span>
-                </h2>
+                @if (auth()->user())
+                    <h2
+                        class="relative text-black rounded-lg text-blue hover:shadow-2xl transform transition-transform duration-500 hover:scale-105 hover:rotate-1">
+                        <span class="text-xs hidden sm:block md:block sm:text-sm lg:text-base">Halo,
+                            {{ Auth::user()->name }}</span>
+                        <span class="absolute inset-0 from-pink-300 to-orange-300 opacity-25 rounded-lg -z-10"></span>
+                    </h2>
+                @endif
+
+                @if (!auth()->user())
+                    <div class="relative" x-data="{ isOpen: false }">
+                        <a href="/login"
+                            class="flex mx-3 text-sm rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                            aria-expanded="false" aria-haspopup="true">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-6 h-6 rounded-full" src="{{ asset('svg/log-in.svg') }}" alt="user photo">
+                        </a>
+                    </div>
+                @endif
 
                 <!-- Profile button with dropdown -->
-                <div class="relative" x-data="{ isOpen: false }">
-                    <button @click="isOpen = !isOpen"
-                        class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                        aria-expanded="false" aria-haspopup="true">
-                        <span class="sr-only">Open user menu</span>
-                        <img class="w-8 h-8 rounded-full" src="{{ asset('bps_logo.png') }}" alt="user photo">
-                    </button>
-                    <!-- Dropdown menu -->
-                    <div x-show="isOpen" @click.away="isOpen = false"
-                        class="absolute right-0 mt-2 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
-                        id="dropdown" style="display: none;">
-                        <div class="py-3 px-4">
-                            <span
-                                class="block text-sm font-semibold text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
-                            <span
-                                class="block text-sm text-gray-500 truncate dark:text-gray-400">{{ Auth::user()->email }}</span>
+                @if (auth()->user())
+                    <div class="relative" x-data="{ isOpen: false }">
+                        <button @click="isOpen = !isOpen"
+                            class="flex mx-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                            aria-expanded="false" aria-haspopup="true">
+                            <span class="sr-only">Open user menu</span>
+                            <img class="w-8 h-8 rounded-full" src="{{ asset('bps_logo.png') }}" alt="user photo">
+                        </button>
+
+                        <!-- Dropdown menu -->
+                        <div x-show="isOpen" @click.away="isOpen = false"
+                            class="absolute right-0 mt-2 w-56 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600"
+                            id="dropdown" style="display: none;">
+                            <div class="py-3 px-4">
+                                <span
+                                    class="block text-sm font-semibold text-gray-900 dark:text-white">{{ Auth::user()->name }}</span>
+                                <span
+                                    class="block text-sm text-gray-500 truncate dark:text-gray-400">{{ Auth::user()->email }}</span>
+                            </div>
+                            <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                                <li>
+                                    <a href="/profile"
+                                        class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">My
+                                        profile</a>
+                                </li>
+                            </ul>
+                            <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button type="submit"
+                                            class="block w-full py-2 px-4 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">
+                                            Sign out
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                         </div>
-                        <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
-                            <li>
-                                <a href="/profile"
-                                    class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">My
-                                    profile</a>
-                            </li>
-                        </ul>
-                        <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
-                            <li>
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <button type="submit"
-                                        class="block w-full py-2 px-4 text-sm text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-400 dark:hover:text-white">
-                                        Sign out
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
+                @endif
             </div>
+        </div>
         </div>
     </nav>
 </header>

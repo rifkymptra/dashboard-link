@@ -57,7 +57,7 @@
                             <th scope="col" class="px-6 py-3">Deskripsi</th>
                             <th scope="col" class="px-6 py-3 hidden md:table-cell">Kategori</th>
                             <th scope="col" class="px-6 py-3">URL</th>
-                            @if (auth()->user()->role === 'admin')
+                            @if (auth()->user())
                                 <th scope="col" class="px-6 py-3">Aksi</th>
                             @endif
                         </tr>
@@ -78,7 +78,7 @@
                                     <a href="{{ $link->url }}"
                                         class="text-blue-600 hover:underline">{{ $link->url }}</a>
                                 </td>
-                                @if (auth()->user()->role === 'admin')
+                                @if (auth()->user())
                                     <td class="px-6 py-4 text-right">
                                         <button @click="editLink({{ $link->id }}); showEditModal = true;"
                                             class="font-medium text-blue-600 hover:underline">Edit</button>
@@ -131,7 +131,7 @@
         </div>
 
         <!-- Edit Modal -->
-        @if (auth()->user()->role === 'admin')
+        @if (auth()->user())
             <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
                 x-show="showEditModal" @keydown.escape.window="showEditModal = false"
                 @click.outside="showEditModal = false;">

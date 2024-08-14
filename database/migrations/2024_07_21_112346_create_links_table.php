@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreignId('submitted_by')->constrained(
                 table: 'users',
                 indexName: 'links_submitted_by_index'
-            )->onDelete('cascade');
+            )->onDelete('cascade')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained(
                 table: 'users',
                 indexName: 'links_approved_by_index'

@@ -2,6 +2,12 @@
     <div class="container mx-auto px-4 py-8">
         <h2>Beranda</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
+        <p>DataLink Explorer merupakan sebuah dashboard yang menyimpan seluruh link website yang dipergunakan dalam
+            melaksanakan tugas di lingkungan BPS Kota Solok.</p>
+        <p>Pembuatan website ini didasarkan pada kebutuhan akan website yang semakin banyak dalam melaksanakan pekerjaan
+            sehari-hari, yang mana bisa saja ketika seorang pegawai dipindahtugaskan, link website yang dipergunakan
+            dalam satuan kerja tersebut hanya diketahui oleh pegawai tersebut. Sehingga dibuatlah DataLink Explorer
+            untuk memudahkan pencarian website yang dipergunakan dalam tugas di Badan Pusat Statistik.</p>
 
         <!-- Grafik Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -15,14 +21,16 @@
                 <canvas id="monthlyLinkTrendsChart"></canvas>
             </div>
         </div>
+
     </div>
 
     <!-- Rangkuman Section -->
     <h2 class="text-2xl font-bold mt-10 mb-4">Rangkuman</h2>
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
-        <x-summary-card icon="svg/link.svg" title="Jumlah Link" description="{{ count($links) }}" />
-        @if (auth()->user()->role === 'admin')
+        <x-summary-card icon="svg/link.svg" title="Jumlah Link"
+            description="{{ count($links->where('status', 'approved')) }}" />
+        @if (auth()->user())
             <x-summary-card icon="svg/file-plus.svg" title="Link Belum Disetujui"
                 description="{{ count($links->where('status', 'submitted')) }}" />
         @endif
@@ -33,20 +41,19 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
             description="Rangkuman link yang digunakan" />
-        @if (auth()->user()->role === 'admin')
+        @if (auth()->user())
             <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
                 description="Pengajuan link yang belum disetujui" />
-        @endif
-        @if (auth()->user()->role === 'user')
-            <x-shortcut-card href="/profile" icon="svg/users.svg" title="Profile"
-                description="Edit profil & ganti password" />
         @endif
         <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
             description="Ajukan sebuah link baru!" />
     </div>
 
-    {{-- Visitor Statistics --}}
-    <x-visitor-report />
+    @if (auth()->user())
+        {{-- Visitor Statistics --}}
+        <x-visitor-report />
+    @endif
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
