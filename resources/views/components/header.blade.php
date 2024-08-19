@@ -7,7 +7,8 @@
             <!-- Left side -->
             <div class="flex justify-start items-center">
                 <!-- Toggle sidebar button (hidden on larger screens) -->
-                <button @click="open = !open; $dispatch('toggle-sidebar', { open: open })"
+                <button class="@if (!auth()->user()) md:hidden lg:hidden @endif"
+                    @click="open = !open; $dispatch('toggle-sidebar', { open: open })"
                     class="text-black focus:outline-none pr-2">
                     <img x-show="open" src="{{ asset('svg/x.svg') }}" class="lg:h-8 lg:w-8 sm:h-7 sm:w-7 h-6 w-6" />
                     <img x-show="!open" src="{{ asset('svg/align-left.svg') }}"
@@ -22,6 +23,21 @@
                         Explorer</span>
                 </a>
             </div>
+
+            @if (!auth()->user())
+                <!-- Center menu items -->
+                <div class="md:flex flex-grow justify-center space-x-4 lg:space-x-8 mr-40 hidden">
+                    <a href="/beranda"
+                        class="text-gray-900 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 font-semibold">Beranda</a>
+                    <a href="/link"
+                        class="text-gray-900 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 font-semibold">Daftar
+                        Link</a>
+                    <a href="/link/create"
+                        class="text-gray-900 dark:text-white hover:text-blue-500 dark:hover:text-blue-400 font-semibold">Ajukan</a>
+                </div>
+            @endif
+
+
             <!-- Right side -->
             <div class="flex items-center lg:order-2">
                 @if (auth()->user())
@@ -83,9 +99,9 @@
                                 </li>
                             </ul>
                         </div>
+                    </div>
                 @endif
             </div>
-        </div>
         </div>
     </nav>
 </header>

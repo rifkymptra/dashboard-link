@@ -2,7 +2,7 @@
     open = false;
 }" @toggle-sidebar.window="open = $event.detail.open"
     :class="open ? 'w-64' : 'w-0'"
-    class="bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-0 md:top-2">
+    class="@if (!auth()->user()) md:hidden lg:hidden) @endif bg-white text-black min-h-screen transition-all duration-300 fixed md:relative z-40 md:z-auto border-r border-gray-200 top-0 md:top-2">
     <nav class="mt-10 pt-8 transition-all duration-300 h-fit md:h-full w-64 md:fixed" :class="open ? 'block' : 'hidden'">
         <a href="/beranda"
             class="block py-2 px-4 transition duration-200 hover:bg-gray-200

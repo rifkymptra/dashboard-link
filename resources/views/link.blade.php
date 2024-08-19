@@ -1,6 +1,6 @@
 <x-layout>
     <div class="container px-4 py-8" x-data="{ showEditModal: false }">
-        <h2 class="">Beranda</h2>
+        <h2 class="">Daftar Link</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
         <!-- Filter Section -->
@@ -54,9 +54,9 @@
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" class="px-6 py-3">Judul</th>
-                            <th scope="col" class="px-6 py-3">Deskripsi</th>
                             <th scope="col" class="px-6 py-3 hidden md:table-cell">Kategori</th>
-                            <th scope="col" class="px-6 py-3">URL</th>
+                            <th scope="col" class="px-6 py-3">Deskripsi</th>
+                            {{-- <th scope="col" class="px-6 py-3">URL</th> --}}
                             @if (auth()->user())
                                 <th scope="col" class="px-6 py-3">Aksi</th>
                             @endif
@@ -66,18 +66,23 @@
                         @foreach ($links as $link)
                             <tr
                                 class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4">{{ $link->link_name }} @if ($link->vpn)
-                                        <span class="bg-cyan-400 p-1 text-[8px] md:text-[10px] font-bold rounded-full">
+                                <td class="px-6 py-4 text-blue-600 font-semibold"> <a class="hover:underline"
+                                        href="{{ $link->url }}">
+                                        {{ $link->link_name }} </a>
+                                    @if ($link->vpn)
+                                        <span
+                                            class="bg-yellow-300 p-1 text-[8px] md:text-[10px] font-bold text-black rounded-full">
                                             VPN!
                                         </span>
                                     @endif
+
                                 </td>
-                                <td class="px-6 py-4">{{ $link->description_link }}</td>
                                 <td class="px-6 py-4 hidden md:table-cell">{{ $link->sectionId->section_name }}</td>
-                                <td class="px-6 py-4">
+                                <td class="px-6 py-4">{{ $link->description_link }}</td>
+                                {{-- <td class="px-6 py-4">
                                     <a href="{{ $link->url }}"
                                         class="text-blue-600 hover:underline">{{ $link->url }}</a>
-                                </td>
+                                </td> --}}
                                 @if (auth()->user())
                                     <td class="px-6 py-4 text-right">
                                         <button @click="editLink({{ $link->id }}); showEditModal = true;"

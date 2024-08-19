@@ -9,18 +9,19 @@
             dalam satuan kerja tersebut hanya diketahui oleh pegawai tersebut. Sehingga dibuatlah DataLink Explorer
             untuk memudahkan pencarian website yang dipergunakan dalam tugas di Badan Pusat Statistik.</p>
 
-        <!-- Grafik Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Bar Chart for Links by Section -->
-            <div class="bg-white p-4 shadow rounded-lg">
-                <canvas id="linksBySectionChart"></canvas>
-            </div>
+        @if (auth()->user())
+            <!-- Grafik Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Bar Chart for Links by Section -->
+                <div class="bg-white p-4 shadow rounded-lg">
+                    <canvas id="linksBySectionChart"></canvas>
+                </div>
 
-            <!-- Line Chart for Monthly Link Trends -->
-            <div class="bg-white p-4 shadow rounded-lg">
-                <canvas id="monthlyLinkTrendsChart"></canvas>
+                <!-- Line Chart for Monthly Link Trends -->
+                <div class="bg-white p-4 shadow rounded-lg">
+                    <canvas id="monthlyLinkTrendsChart"></canvas>
+                </div>
             </div>
-        </div>
 
     </div>
 
@@ -30,10 +31,8 @@
         <x-summary-card icon="svg/airplay.svg" title="Jumlah Seksi" description="{{ count($sections) }}" />
         <x-summary-card icon="svg/link.svg" title="Jumlah Link"
             description="{{ count($links->where('status', 'approved')) }}" />
-        @if (auth()->user())
-            <x-summary-card icon="svg/file-plus.svg" title="Link Belum Disetujui"
-                description="{{ count($links->where('status', 'submitted')) }}" />
-        @endif
+        <x-summary-card icon="svg/file-plus.svg" title="Link Belum Disetujui"
+            description="{{ count($links->where('status', 'submitted')) }}" />
     </div>
 
     <!-- Pintasan Section -->
@@ -41,17 +40,14 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
         <x-shortcut-card href="/link" icon="svg/link.svg" title="Link"
             description="Rangkuman link yang digunakan" />
-        @if (auth()->user())
-            <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
-                description="Pengajuan link yang belum disetujui" />
-        @endif
+        <x-shortcut-card href="/link/approval" icon="svg/airplay.svg" title="Approval"
+            description="Pengajuan link yang belum disetujui" />
         <x-shortcut-card href="/link/create" icon="svg/book.svg" title="Buat Baru"
             description="Ajukan sebuah link baru!" />
     </div>
 
-    @if (auth()->user())
-        {{-- Visitor Statistics --}}
-        <x-visitor-report />
+    {{-- Visitor Statistics --}}
+    <x-visitor-report />
     @endif
 
 

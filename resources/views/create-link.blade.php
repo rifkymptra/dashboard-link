@@ -1,6 +1,7 @@
 <x-layout>
     <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold mb-6">Tambah Link Baru</h1>
+        <h1 class="text-3xl font-bold ">Tambah Link Baru</h1>
+        <p class="mb-6 text-xs text-gray-500 italic">Isi form berikut untuk membuat pengajuan link</p>
 
         <form id="create-link-form" action="{{ route('links.store') }}" method="POST" class="space-y-4">
             @csrf

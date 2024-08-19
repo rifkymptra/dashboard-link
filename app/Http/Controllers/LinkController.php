@@ -20,6 +20,7 @@ class LinkController extends Controller
 
     public function search(Request $request)
     {
+        $sections = Section::all();
         $query = $request->input('search');
         $sectionIds = $request->input('sections', []);
 
@@ -47,10 +48,10 @@ class LinkController extends Controller
             ]);
 
         if ($request->ajax()) {
-            return view('partials.links', compact('links'))->render();
+            return view('partials.links', compact('links', 'sections'))->render();
         }
 
-        return view('link', compact('links'));
+        return view('link', compact('links', 'sections'));
     }
 
     // Menampilkan form create link
