@@ -23,6 +23,7 @@ class LinkFactory extends Factory
             'url' => fake()->url(),
             'description_link' => fake()->sentence(20),
             'vpn' => fake()->boolean(),
+            'instansi' => fake()->word(),
             'section_id' => Section::all()->random()->id,
             'submitted_by' => User::all()->random()->id,
             'approved_by' => User::all()->random()->id,

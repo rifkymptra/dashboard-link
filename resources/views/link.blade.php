@@ -55,8 +55,8 @@
                         <tr>
                             <th scope="col" class="px-6 py-3">Judul</th>
                             <th scope="col" class="px-6 py-3 hidden md:table-cell">Kategori</th>
+                            <th scope="col" class="px-6 py-3">Instansi</th>
                             <th scope="col" class="px-6 py-3">Deskripsi</th>
-                            {{-- <th scope="col" class="px-6 py-3">URL</th> --}}
                             @if (auth()->user())
                                 <th scope="col" class="px-6 py-3">Aksi</th>
                             @endif
@@ -78,6 +78,7 @@
 
                                 </td>
                                 <td class="px-6 py-4 hidden md:table-cell">{{ $link->sectionId->section_name }}</td>
+                                <td class="px-6 py-4">{{ $link->instansi }}</td>
                                 <td class="px-6 py-4">{{ $link->description_link }}</td>
                                 {{-- <td class="px-6 py-4">
                                     <a href="{{ $link->url }}"
@@ -112,7 +113,7 @@
                     <!-- Pagination Links -->
                     @for ($i = 1; $i <= $links->lastPage(); $i++)
                         <li>
-                            <a href="{{ $links->url($i) }}"
+                            <a href="{{ $links->appends(['search' => request()->query('search'), 'sections' => request()->query('sections')])->url($i) }}"
                                 class="flex items-center justify-center px-4 h-10 leading-tight {{ $links->currentPage() == $i ? 'text-blue-600 border border-blue-300 bg-blue-50' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700' }}">
                                 {{ $i }}
                             </a>
@@ -208,6 +209,9 @@
                     },
                     success: function(response) {
                         $('#links-table-body').html(response);
+                        // Re-attach event listeners after content update
+                        attachEventListeners();
+
                     }
                 });
             }

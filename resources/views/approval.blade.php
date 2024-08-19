@@ -17,6 +17,7 @@
                         <th scope="col" class="px-2 py-3">Judul</th>
                         <th scope="col" class="px-2 py-3">Deskripsi</th>
                         <th scope="col" class="px-2 py-3">Kategori</th>
+                        <th scope="col" class="px-2 py-3">Instansi</th>
                         <th scope="col" class="px-2 py-3 max-w-xs">URL</th>
                         <th scope="col" class="px-2 py-3">Aksi</th>
                     </tr>
@@ -34,7 +35,8 @@
                                 @endif
                             </th>
                             <td class="px-2 py-4">{{ $link->description_link }}</td>
-                            <td class="px-2 py-4">{{ $link->submittedBy->section->section_name }}</td>
+                            <td class="px-2 py-4">{{ $link->sectionId->section_name }}</td>
+                            <td class="px-2 py-4">{{ $link->instansi }}</td>
                             <td class="px-2 py-4 max-w-xs">
                                 <a href="{{ $link->url }}"
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>

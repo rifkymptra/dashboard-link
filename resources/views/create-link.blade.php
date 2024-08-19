@@ -44,6 +44,12 @@
             </div>
 
             <div>
+                <label for="instansi" class="block text-sm font-medium text-gray-700">Instansi</label>
+                <input type="text" id="instansi" name="instansi" required placeholder="ex: BPS"
+                    class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full">
+            </div>
+
+            <div>
                 <label for="description_link" class="block text-sm font-medium text-gray-700">Deskripsi</label>
                 <textarea id="description_link" name="description_link" rows="4" required
                     placeholder="ex: website tempat menyediakan informasi tentang data statistik dasar dan sektoral"

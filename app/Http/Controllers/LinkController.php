@@ -70,7 +70,8 @@ class LinkController extends Controller
             'url' => 'required|url',
             'description_link' => 'required|string',
             'vpn' => 'required|boolean',
-            'section_id' => 'required|exists:sections,id'
+            'section_id' => 'required|exists:sections,id',
+            'instansi' => 'required|string|max:255',
         ]);
         try {
             Link::create([
@@ -80,6 +81,7 @@ class LinkController extends Controller
                 'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id, // Assuming section_id is from the logged-in user
                 'submitted_by' => $user->id ?? null,
+                'instansi' => $request->instansi,
                 'status' => 'submitted',
                 'note' => 'belum diperiksa',
             ]);

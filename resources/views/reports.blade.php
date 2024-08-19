@@ -7,8 +7,8 @@
                 <select id="report-type" name="report-type"
                     class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                     <option value="daily">Harian</option>
-                    <option value="monthly">Bulanan</option>
-                    <option value="yearly">Tahunan</option>
+                    <option value="monthly">Sebulan</option>
+                    <option value="yearly">Setahun</option>
                 </select>
             </div>
 

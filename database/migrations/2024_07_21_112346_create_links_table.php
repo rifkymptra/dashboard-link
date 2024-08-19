@@ -18,6 +18,7 @@ return new class extends Migration
                 indexName: 'links_section_id'
             )->onDelete('cascade');
             $table->string('link_name');
+            $table->string('instansi')->nullable();
             $table->string('url');
             $table->string('description_link');
             $table->boolean('vpn')->default(false);

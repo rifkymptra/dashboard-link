@@ -16,7 +16,9 @@ class Link extends Model
         'description_link',
         'submitted_by',
         'approved_by',
-        'status'
+        'status',
+        'note',
+        'instansi',
     ];
 
     public function sectionId()
