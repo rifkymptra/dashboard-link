@@ -1,6 +1,7 @@
-<footer class="fixed bottom-0 w-full bg-zinc-50 text-center dark:bg-neutral-700 lg:text-left">
-    <div class="bg-black/5 p-4 text-center text-surface dark:text-white">
-        © 2024 Copyright:
-        <a href="https://solokkota.bps.go.id/">BPS Kota Solok</a>
+<footer class="text-center lg:text-left pt-4 -ml-4">
+    <div class="bg-gray-900 p-4 text-center text-white dark:text-gray-300">
+        © {{ date('Y') }} Copyright:
+        <a href="https://solokkota.bps.go.id/" class="hover:text-teal-300 transition duration-300">BPS Kota Solok</a> |
+        <span>Rifky Maulana Putra</span>
     </div>
 </footer>

@@ -23,11 +23,12 @@
     <div x-data="{ open: window.innerWidth >= 768 }">
         <x-header></x-header>
 
-        <div @resize.window="open = window.innerWidth >= 768" @toggle-sidebar.window="open = !open" class="flex">
+        <div @resize.window="open = window.innerWidth >= 768" @toggle-sidebar.window="open = !open"
+            class="flex bg-white">
             <x-sidebar x-show="open"></x-sidebar>
 
             <!-- Content -->
-            <div class="flex-1 px-0 md:px-4 bg-white pt-20">
+            <div class="flex-1 px-0 ml-4 bg-white pt-20">
                 {{ $slot }}
             </div>
         </div>
