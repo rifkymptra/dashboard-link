@@ -1,11 +1,16 @@
 <x-layout>
-    <div class="flex min-h-full flex-col justify-center px-6 pt-12 lg:px-8">
+    <div class="flex min-h-full flex-col justify-center px-6 -mt-4 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <a href="/beranda" class="flex mr-4 justify-center">
                 <img src="{{ asset('bps_logo.png') }}" class="mr-3 md:h-14 sm:h-7 h-6" alt="FlowBite Logo" />
-                <span
-                    class="self-center sm:text-lg md:text-2xl text-sm font-semibold whitespace-nowrap dark:text-white italic">DataLink
-                    Explorer</span>
+                <div class="flex flex-col self-center">
+                    <span
+                        class="sm:text-xs md:text-lg text-xs italic font-semibold whitespace-nowrap dark:text-white">BADAN
+                        PUSAT STATISTIK</span>
+                    <span
+                        class="sm:text-xs md:text-lg text-xs italic font-semibold whitespace-nowrap dark:text-white">KOTA
+                        SOLOK</span>
+                </div>
             </a>
             <h2 class="mt-4 text-center text-2xl md:text-4xl font-bold leading-9 tracking-tight text-gray-900">Sign in
             </h2>
@@ -13,7 +18,7 @@
             </h2>
         </div>
 
-        <div class="mt-0 md:mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div class="mt-0 md:mt-0 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-2 md:space-y-6" action="{{ route('login') }}" method="POST">
                 @csrf
                 <div>

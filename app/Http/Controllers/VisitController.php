@@ -25,6 +25,8 @@ class VisitController extends Controller
             ->groupBy('date')
             ->get();
 
+        $weeklyVisitors = count($weeklyVisitors);
+
         $monthlyVisitors = Visitor::selectRaw('DATE(created_at) as date, COUNT(DISTINCT ip) as unique_visitors')
             ->whereBetween('created_at', [$startOfMonth, $today])
             ->groupBy('date')

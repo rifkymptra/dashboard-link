@@ -1,7 +1,5 @@
 <?php
 
-use App\Models\Link;
-use App\Models\Section;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\UserController;

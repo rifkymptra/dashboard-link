@@ -35,9 +35,9 @@
             @if (!auth()->user())
                 <div class="text-justify mx-auto">
                     <div class="flex flex-col lg:flex-row items-center justify-between mb-16">
-                        <div class="lg:w-3/5 mb-8 lg:mb-0">
-                            <h2 class="text-3xl font-bold mb-4">Temukan Website Anda Sekarang!</h2>
-                            <p class="text-lg mb-6">
+                        <div class="lg:w-3/5 mb-8 lg:mb-0 bg-gray-900 rounded-xl px-8 pb-4 pt-8 text-white">
+                            <h2 class="text-3xl font-bold mb-4 text-teal-300">Temukan Website Anda Sekarang!</h2>
+                            <p class="text-lg mb-6 px-10">
                                 Pembuatan website ini didasarkan pada kebutuhan akan website yang semakin banyak dalam
                                 melaksanakan
                                 pekerjaan sehari-hari, yang mana bisa saja ketika seorang pegawai dipindahtugaskan, link
@@ -49,7 +49,7 @@
                                 Statistik.
                             </p>
                             <a href="/link"
-                                class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-md font-bold text-gray-900 rounded-3xl group bg-gradient-to-br from-cyan-500 to-teal-500 group-hover:from-cyan-500 group-hover:to-teal-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-teal-200 dark:focus:ring-cyan-800">
+                                class=" ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-md font-bold text-gray-900 rounded-3xl group bg-gradient-to-br from-cyan-500 to-teal-500 group-hover:from-cyan-500 group-hover:to-teal-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-teal-200 dark:focus:ring-cyan-800">
                                 <span
                                     class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-3xl group-hover:bg-opacity-0">
                                     Temukan!
