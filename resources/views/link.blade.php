@@ -25,13 +25,15 @@
             <div class="flex space-x-4">
                 <div>
                     <label for="filter-category" class="block text-sm font-medium text-gray-700">Kategori</label>
-                    <select id="filter-category" class="mt-1 block w-full">
+                    <select id="filter-category"
+                        class="mt-1 block w-full rounded-lg hover:cursor-pointer hover:bg-gray-100">
                         <option value="">Pilih Kategori</option>
                     </select>
                 </div>
                 <div>
                     <label for="filter-instansi" class="block text-sm font-medium text-gray-700">Instansi</label>
-                    <select id="filter-instansi" class="mt-1 block w-full">
+                    <select id="filter-instansi"
+                        class="mt-1 block w-full rounded-lg hover:cursor-pointer hover:bg-gray-100">
                         <option value="">Pilih Instansi</option>
                     </select>
                 </div>

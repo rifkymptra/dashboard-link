@@ -7,12 +7,12 @@
             <!-- Left side -->
             <div class="flex justify-start items-center">
                 <!-- Toggle sidebar button (hidden on larger screens) -->
-                <button class="@if (!auth()->user()) md:hidden lg:hidden @endif"
+                <button aria-label="toggle-sidebar" class="@if (!auth()->user()) md:hidden lg:hidden @endif"
                     @click="open = !open; $dispatch('toggle-sidebar', { open: open })"
                     class="text-white focus:outline-none pr-2">
-                    <img x-show="open" src="{{ asset('svg/x-white.svg') }}"
+                    <img x-show="open" alt="toggle sidebar" src="{{ asset('svg/x-white.svg') }}"
                         class="lg:h-8 lg:w-8 sm:h-7 sm:w-7 h-6 w-6 white" />
-                    <img x-show="!open" src="{{ asset('svg/align-left-white.svg') }}"
+                    <img x-show="!open" alt="toggle sidebar" src="{{ asset('svg/align-left-white.svg') }}"
                         class="lg:h-8 lg:w-8 sm:h-7 sm:w-7 h-6 w-6" />
                 </button>
 

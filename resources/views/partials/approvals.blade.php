@@ -8,6 +8,7 @@
         </th>
         <td class="px-2 py-4">{{ $link->description_link }}</td>
         <td class="px-2 py-4">{{ $link->submittedBy->section->section_name }}</td>
+        <td class="px-2 py-4">{{ $link->instansi }}</td>
         <td class="px-2 py-4 max-w-xs">
             <a href="{{ $link->url }}" class="text-blue-600 hover:underline">{{ $link->url }}</a>
         </td>
