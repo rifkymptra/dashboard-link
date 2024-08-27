@@ -9,8 +9,8 @@
                     Temukan Website yang Anda Butuhkan di <span class="text-teal-300">DataLink Explorer</span>
                 </h1>
                 <p class="text-lg lg:text-xl mb-8">
-                    Sebuah dashboard yang menyimpan seluruh link website dalam pelaksanaan tugas di lingkungan BPS Kota
-                    Solok.
+                    Sebuah dashboard yang menyimpan seluruh link website dalam pelaksanaan tugas di lingkungan Badan
+                    Pusat Statistik.
                 </p>
                 <a href="/link"
                     class="inline-block bg-teal-400 text-black font-semibold py-3 px-6 rounded-full hover:bg-teal-500 transition duration-300">
@@ -38,14 +38,14 @@
                         <div class="lg:w-3/5 mb-8 lg:mb-0 bg-gray-900 rounded-xl px-8 pb-4 pt-8 text-white">
                             <h2 class="text-3xl font-bold mb-4 text-teal-300">Temukan Website Anda Sekarang!</h2>
                             <p class="text-lg mb-6 px-10">
-                                Pembuatan website ini didasarkan pada kebutuhan akan website yang semakin banyak dalam
-                                melaksanakan
-                                pekerjaan sehari-hari, yang mana bisa saja ketika seorang pegawai dipindahtugaskan, link
-                                website
-                                yang
-                                dipergunakan dalam satuan kerja tersebut hanya diketahui oleh pegawai tersebut. Sehingga
-                                dibuatlah DataLink
-                                Explorer untuk memudahkan pencarian website yang dipergunakan dalam tugas di Badan Pusat
+                                Pembuatan website ini didasarkan pada penggunaan aplikasi berbasis website yang semakin
+                                banyak dalam melaksanakan pekerjaan sehari-hari, yang mana bisa saja ketika seorang
+                                terjadi perubahan tim atau terdapat pegawai yang dipindahtugaskan, link
+                                website yang dipergunakan dalam satuan kerja tersebut hanya diketahui oleh tim atau
+                                pegawai
+                                yang bersangkutan. Sehingga
+                                dibuatlah DataLink Explorer untuk memudahkan pencarian website yang dipergunakan dalam
+                                pelaksanaan tugas di Badan Pusat
                                 Statistik.
                             </p>
                             <a href="/link"

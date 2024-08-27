@@ -14,43 +14,7 @@ class LinkController extends Controller
     public function index()
     {
         $sections = Section::all();
-        $links = Link::where('status', 'approved')->paginate(10);
-        return view('link', compact('links', 'sections'));
-    }
-
-    public function search(Request $request)
-    {
-        $sections = Section::all();
-        $query = $request->input('search');
-        $sectionIds = $request->input('sections', []);
-
-        $links = Link::where('status', 'approved')
-            ->when($query, function ($q) use ($query) {
-                $q->where(function ($q) use ($query) {
-                    $q->where('link_name', 'like', "%$query%")
-                        ->orWhere('description_link', 'like', "%$query%")
-                        ->orWhere('url', 'like', "%$query%")
-                        ->orWhere('vpn', 'like', "%$query%")
-                        ->orWhereHas('sectionId', function ($q) use ($query) {
-                            $q->where('section_name', 'like', "%$query%");
-                        });
-                });
-            })
-            ->when($sectionIds, function ($q) use ($sectionIds) {
-                $q->whereHas('sectionId', function ($q) use ($sectionIds) {
-                    $q->whereIn('id', $sectionIds);
-                });
-            })
-            ->paginate(10)
-            ->appends([
-                'search' => $query,
-                'sections' => $sectionIds
-            ]);
-
-        if ($request->ajax()) {
-            return view('partials.links', compact('links', 'sections'))->render();
-        }
-
+        $links = Link::where('status', 'approved')->get(); // get() untuk DataTables
         return view('link', compact('links', 'sections'));
     }
 
@@ -172,6 +136,7 @@ class LinkController extends Controller
             'vpn' => $link->vpn,
             'section_id' => $link->section_id,
             'sections' => $sections,
+            'instansi' => $link->instansi
         ]);
     }
 
@@ -186,6 +151,7 @@ class LinkController extends Controller
                 'url' => 'required|url',
                 'vpn' => 'required|boolean',
                 'section_id' => 'required|exists:sections,id',
+                'instansi' => 'required|string|max:255',
             ]);
 
             $link = Link::findOrFail($request->id);
@@ -195,6 +161,7 @@ class LinkController extends Controller
                 'url' => $request->url,
                 'vpn' => $request->vpn ? true : false,
                 'section_id' => $request->section_id,
+                'instansi' => $request->instansi
             ]);
 
             return redirect()->route('links.index')->with('success', 'Link berhasil diperbarui.');
