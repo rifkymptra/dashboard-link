@@ -56,6 +56,10 @@
         </form>
     </div>
     <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // Nonaktifkan tombol submit untuk mencegah double submit
+            event.target.querySelector('button[type="submit"]').disabled = true;
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Handle successful creation
             @if (session('success'))

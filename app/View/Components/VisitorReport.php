@@ -14,6 +14,7 @@ class VisitorReport extends Component
     public $weekCount;
     public $monthCount;
     public $yearCount;
+
     /**
      * Create a new component instance.
      */
@@ -23,7 +24,7 @@ class VisitorReport extends Component
         $startOfWeek = Carbon::now()->startOfWeek()->toDateString();
         $startOfMonth = Carbon::now()->startOfMonth()->toDateString();
         $startOfYear = Carbon::now()->startOfYear()->toDateString();
-        $nextDay = Carbon::parse($today)->addDay()->toDateString();
+        $nextDay = Carbon::now()->addDay()->toDateString();
 
         // Hitung jumlah pengunjung hari ini
         $this->todayCount = Visitor::whereDate('created_at', $today)
@@ -31,19 +32,34 @@ class VisitorReport extends Component
             ->count();
 
         // Hitung jumlah pengunjung minggu ini
-        $this->weekCount = Visitor::whereBetween('created_at', [$startOfWeek, $nextDay])
-            ->distinct('ip')
-            ->count();
+        $this->weekCount = $this->calculateUniqueVisitors($startOfWeek, $nextDay);
 
         // Hitung jumlah pengunjung bulan ini
-        $this->monthCount = Visitor::whereBetween('created_at', [$startOfMonth, $nextDay])
-            ->distinct('ip')
-            ->count();
+        $this->monthCount = $this->calculateUniqueVisitors($startOfMonth, $nextDay);
 
         // Hitung jumlah pengunjung tahun ini
-        $this->yearCount = Visitor::whereBetween('created_at', [$startOfYear, $nextDay])
-            ->distinct('ip')
-            ->count();
+        $this->yearCount = $this->calculateUniqueVisitors($startOfYear, $nextDay);
+    }
+
+    /**
+     * Calculate unique visitors within a given range.
+     */
+    private function calculateUniqueVisitors($startDate, $endDate)
+    {
+        $totalUniqueVisitors = 0;
+        $currentDate = Carbon::parse($endDate);
+
+        // Loop dari tanggal akhir hingga tanggal mulai
+        while ($currentDate->greaterThanOrEqualTo($startDate)) {
+            $dailyCount = Visitor::whereDate('created_at', $currentDate->toDateString())
+                ->distinct('ip')
+                ->count();
+
+            $totalUniqueVisitors += $dailyCount;
+            $currentDate->subDay();  // Mundur satu hari
+        }
+
+        return $totalUniqueVisitors;
     }
 
     /**

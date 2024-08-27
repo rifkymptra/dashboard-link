@@ -2,6 +2,7 @@
     <div class="container mx-auto p-4">
         <div class="bg-white shadow overflow-hidden sm:rounded-lg p-6">
             <h2 class="text-lg font-medium text-gray-900">Laporan Kunjungan</h2>
+            <x-visitor-report />
             <div class="mt-4">
                 <label for="report-type" class="block text-sm font-medium text-gray-700">Tipe Kunjungan</label>
                 <select id="report-type" name="report-type"

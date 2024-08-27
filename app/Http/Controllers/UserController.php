@@ -41,7 +41,7 @@ class UserController extends Controller
                 'role' => $request->role,
             ]);
 
-            return redirect()->route('beranda')->with('success', 'User created successfully.');
+            return redirect()->back()->with('success', 'Akun berhasil dibuat.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Gagal membuat akun.']);
         }
