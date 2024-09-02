@@ -21,7 +21,7 @@ Route::middleware(['admin'])->group(function () {
     Route::post('/link/approval/{id}/accept', [LinkController::class, 'accept'])->name('approval.accept');
     Route::post('/link/approval/{id}/reject', [LinkController::class, 'reject'])->name('approval.reject');
     Route::get('/approval/search', [LinkController::class, 'searchApproval'])->name('approval.search');
-    Route::get('/links/{id}/edit', [LinkController::class, 'edit'])->name('links.edit');
+    Route::post('/link/update', [LinkController::class, 'update'])->name('link.update');
 
     Route::get('users/kelola', [UserController::class, 'kelolaUser'])->name('users.kelola');
     Route::resource('users', UserController::class);

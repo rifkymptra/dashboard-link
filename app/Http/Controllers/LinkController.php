@@ -141,32 +141,52 @@ class LinkController extends Controller
     }
 
     // Method untuk memperbarui link
+    // public function update(Request $request)
+    // {
+    //     try {
+    //         $request->validate([
+    //             'id' => 'required|exists:links,id',
+    //             'link_name' => 'required|string|max:255',
+    //             'description_link' => 'required|string|max:1000',
+    //             'url' => 'required|url',
+    //             'vpn' => 'required|boolean',
+    //             'section_id' => 'required|exists:sections,id',
+    //             'instansi' => 'required|string|max:255',
+    //         ]);
+
+    //         $link = Link::findOrFail($request->id);
+    //         $link->update([
+    //             'link_name' => $request->link_name,
+    //             'description_link' => $request->description_link,
+    //             'url' => $request->url,
+    //             'vpn' => $request->vpn ? true : false,
+    //             'section_id' => $request->section_id,
+    //             'instansi' => $request->instansi
+    //         ]);
+
+    //         return redirect()->route('links.index')->with('success', 'Link berhasil diperbarui.');
+    //     } catch (\Exception $e) {
+    //         return redirect()->route('links.index')->with('error', 'Link gagal diperbarui: ' . $e->getMessage());
+    //     }
+    // }
+
     public function update(Request $request)
     {
+        $validatedData = $request->validate([
+            'link_name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'instansi' => 'required|string|max:255',
+            'section_id' => 'required|integer|exists:sections,id',
+            'vpn' => 'required|boolean',
+        ]);
+
         try {
-            $request->validate([
-                'id' => 'required|exists:links,id',
-                'link_name' => 'required|string|max:255',
-                'description_link' => 'required|string|max:1000',
-                'url' => 'required|url',
-                'vpn' => 'required|boolean',
-                'section_id' => 'required|exists:sections,id',
-                'instansi' => 'required|string|max:255',
-            ]);
-
             $link = Link::findOrFail($request->id);
-            $link->update([
-                'link_name' => $request->link_name,
-                'description_link' => $request->description_link,
-                'url' => $request->url,
-                'vpn' => $request->vpn ? true : false,
-                'section_id' => $request->section_id,
-                'instansi' => $request->instansi
-            ]);
+            $link->update($validatedData);
 
-            return redirect()->route('links.index')->with('success', 'Link berhasil diperbarui.');
+            return response()->json(['success' => true]);
         } catch (\Exception $e) {
-            return redirect()->route('links.index')->with('error', 'Link gagal diperbarui: ' . $e->getMessage());
+            return response()->json(['success' => false, 'errors' => $e->getMessage()], 422);
         }
     }
 
