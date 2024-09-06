@@ -21,12 +21,14 @@ class LinkFactory extends Factory
         return [
             'link_name' => fake()->word(),
             'url' => fake()->url(),
-            'description_link' => fake()->sentence(),
+            'description_link' => fake()->sentence(20),
             'vpn' => fake()->boolean(),
+            'instansi' => fake()->word(),
             'section_id' => Section::all()->random()->id,
             'submitted_by' => User::all()->random()->id,
             'approved_by' => User::all()->random()->id,
             'status' => fake()->randomElement(['submitted', 'approved', 'rejected']),
+            'note' => fake()->sentence(8),
         ];
     }
 }

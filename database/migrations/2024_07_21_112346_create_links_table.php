@@ -18,18 +18,20 @@ return new class extends Migration
                 indexName: 'links_section_id'
             )->onDelete('cascade');
             $table->string('link_name');
+            $table->string('instansi')->nullable();
             $table->string('url');
-            $table->string('description_link');
+            $table->string('description_link')->nullable();
             $table->boolean('vpn')->default(false);
             $table->foreignId('submitted_by')->constrained(
                 table: 'users',
                 indexName: 'links_submitted_by_index'
-            )->onDelete('cascade');
+            )->onDelete('cascade')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained(
                 table: 'users',
                 indexName: 'links_approved_by_index'
             )->onDelete('set null');
-            $table->string('status');
+            $table->string('status')->default('submitted');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

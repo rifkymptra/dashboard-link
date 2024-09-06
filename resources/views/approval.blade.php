@@ -1,63 +1,62 @@
 <x-layout>
-    <div class="container mx-auto px-4 py-8">
-        <h2 class="">Beranda</h2>
+    <div class="container mx-auto px-3 py-4 md:py-8">
+        <h2 class="">Approval</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
-        <div class="flex flex-col sm:flex-row items-center mb-4">
+        <div class="flex flex-col sm:flex-row items-center mb-4 space-y-4 sm:space-y-0 sm:space-x-4">
             <input type="text" id="search" placeholder="Search..."
-                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 mb-2 sm:mb-0 sm:mr-2">
-            <a href="{{ route('links.create') }}"
-                class="relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                <span
-                    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                    Tambah Link
-                </span>
-            </a>
+                class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
+
         </div>
 
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+            <table
+                class="min-w-fit max-w-2 text-xs md:text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-2 sm:px-6 py-3">Judul</th>
-                        <th scope="col" class="px-2 sm:px-6 py-3">Deskripsi</th>
-                        <th scope="col" class="px-2 sm:px-6 py-3">Kategori</th>
-                        <th scope="col" class="px-2 sm:px-6 py-3">URL</th>
-                        {{-- <th scope="col" class="px-2 sm:px-6 py-3">Status</th> --}}
-                        <th scope="col" class="px-2 sm:px-6 py-3">Aksi</th> <!-- New column for actions -->
+                        <th scope="col" class="px-2 py-3">Judul</th>
+                        <th scope="col" class="px-2 py-3">Deskripsi</th>
+                        <th scope="col" class="px-2 py-3">Kategori</th>
+                        <th scope="col" class="px-2 py-3">Instansi</th>
+                        <th scope="col" class="px-2 py-3 max-w-xs">URL</th>
+                        <th scope="col" class="px-2 py-3">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="links-table-body">
                     @foreach ($links as $link)
                         <tr
-                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                            class="odd:bg-white even:bg-gray-50 dark:odd:bg-gray-900 dark:even:bg-gray-800 border-b dark:border-gray-700">
                             <th scope="row"
-                                class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $link->link_name }} @if ($link->vpn)
-                                    <span class="bg-cyan-400 p-1 text-[10px] font-bold rounded-full">
-                                        VPN!
-                                    </span>
+                                class="px-2 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {{ $link->link_name }}
+                                @if ($link->vpn)
+                                    <span
+                                        class="bg-cyan-400 p-1 text-[8px] md:text-[10px] font-bold rounded-full">VPN!</span>
                                 @endif
                             </th>
-                            <td class="px-2 sm:px-6 py-4">{{ $link->description_link }}</td>
-                            <td class="px-2 sm:px-6 py-4">{{ $link->submittedBy->section->section_name }}</td>
-                            <td class="px-2 sm:px-6 py-4">
+                            <td class="px-2 py-4">{{ $link->description_link }}</td>
+                            <td class="px-2 py-4">{{ $link->sectionId->section_name }}</td>
+                            <td class="px-2 py-4">{{ $link->instansi }}</td>
+                            <td class="px-2 py-4 max-w-xs">
                                 <a href="{{ $link->url }}"
                                     class="text-blue-600 hover:underline">{{ $link->url }}</a>
                             </td>
-                            {{-- <td class="px-2 sm:px-6 py-4">{{ $link->status }}</td> --}}
-                            <td
-                                class="px-2 sm:px-6 py-8 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2 ">
-                                <form action="{{ route('approval.accept', $link->id) }}" method="POST">
+                            <td class="px-2 py-4 flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                                <form id="approve-form-{{ $link->id }}"
+                                    action="{{ route('approval.accept', $link->id) }}" method="POST"
+                                    class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setujui</button>
+                                        class="approveButton text-xs md:text-sm w-full sm:w-auto text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full px-0 py-2 md:px-5 md:py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Setuju</button>
                                 </form>
-                                <form action="{{ route('approval.reject', $link->id) }}" method="POST">
+                                <form id="reject-form-{{ $link->id }}"
+                                    action="{{ route('approval.reject', $link->id) }}" method="POST"
+                                    class="w-full sm:w-auto">
                                     @csrf
                                     <button type="submit"
-                                        class="w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
+                                        class="rejectButton text-xs md:text-sm w-full sm:w-auto text-white bg-red-700 hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-300 font-medium rounded-full px-3 py-2 md:px-5 md:py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Tolak</button>
                                 </form>
+
                             </td>
                         </tr>
                     @endforeach
@@ -67,10 +66,9 @@
 
         <nav aria-label="Page navigation example" class="py-8">
             <ul class="flex items-center -space-x-px h-10 text-base">
-                <!-- Pagination links here -->
                 <li>
                     <a href="{{ $links->previousPageUrl() }}"
-                        class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                         <span class="sr-only">Previous</span>
                         <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 6 10">
@@ -89,7 +87,7 @@
                 @endfor
                 <li>
                     <a href="{{ $links->nextPageUrl() }}"
-                        class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                        class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
                         <span class="sr-only">Next</span>
                         <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                             fill="none" viewBox="0 0 6 10">
@@ -100,14 +98,13 @@
                 </li>
             </ul>
         </nav>
-
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
             function fetchLinks(query, sections) {
                 $.ajax({
-                    url: '{{ route('links.search') }}',
+                    url: '{{ route('links.approval') }}',
                     method: 'GET',
                     data: {
                         search: query,
@@ -115,9 +112,132 @@
                     },
                     success: function(response) {
                         $('#links-table-body').html(response);
+                        // Re-attach event listeners after content update
+                        attachEventListeners();
                     }
                 });
             }
+
+            function attachEventListeners() {
+                document.querySelectorAll('.approveButton').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formId = this.closest('form').id;
+                        const linkId = formId.split('-')[2];
+
+                        Swal.fire({
+                            title: 'Catatan',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan catatanmu...',
+                            inputAttributes: {
+                                'aria-label': 'Masukkan catatanmu'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Approve',
+                            cancelButtonText: 'Cancel',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (note) => {
+                                return fetch(`/link/approval/${linkId}/accept`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector(
+                                                    'meta[name="csrf-token"]')
+                                                .getAttribute('content')
+                                        },
+                                        body: JSON.stringify({
+                                            note: note
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (!data.success) {
+                                            throw new Error(data.message);
+                                        }
+                                        return data;
+                                    })
+                                    .catch(error => {
+                                        Swal.showValidationMessage(
+                                            `Request failed: ${error.message}`);
+                                    });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: 'Link diterima dan note telah ditambahkan.',
+                                    icon: 'success'
+                                }).then(() => {
+                                    location
+                                        .reload(); // Refresh the page to see updated data
+                                });
+                            }
+                        });
+                    });
+                });
+
+                document.querySelectorAll('.rejectButton').forEach(button => {
+                    button.addEventListener('click', function(event) {
+                        event.preventDefault(); // Prevent default form submission
+
+                        const formId = this.closest('form').id;
+                        const linkId = formId.split('-')[2];
+
+                        Swal.fire({
+                            title: 'Catatan',
+                            input: 'textarea',
+                            inputPlaceholder: 'Masukkan catatanmu...',
+                            inputAttributes: {
+                                'aria-label': 'Masukkan catatanmu'
+                            },
+                            showCancelButton: true,
+                            confirmButtonText: 'Reject',
+                            cancelButtonText: 'Cancel',
+                            showLoaderOnConfirm: true,
+                            preConfirm: (note) => {
+                                return fetch(`/link/approval/${linkId}/reject`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-CSRF-TOKEN': document.querySelector(
+                                                    'meta[name="csrf-token"]')
+                                                .getAttribute('content')
+                                        },
+                                        body: JSON.stringify({
+                                            note: note
+                                        })
+                                    })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (!data.success) {
+                                            throw new Error(data.message);
+                                        }
+                                        return data;
+                                    })
+                                    .catch(error => {
+                                        Swal.showValidationMessage(
+                                            `Request failed: ${error.message}`);
+                                    });
+                            }
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                Swal.fire({
+                                    title: 'Rejected!',
+                                    text: 'Link berhasil ditolak dan note telah ditambahkan.',
+                                    icon: 'error'
+                                }).then(() => {
+                                    location
+                                        .reload(); // Refresh the page to see updated data
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            // Initialize event listeners
+            attachEventListeners();
 
             $('#search').on('input', function() {
                 let query = $(this).val();
@@ -137,60 +257,6 @@
                 fetchLinks(query, sections);
             });
         });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (session('Sukses'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Sukses!',
-                    text: '{{ session('Sukses') }}',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            @endif
-
-            const acceptForms = document.querySelectorAll('form[action*="accept"]');
-            const rejectForms = document.querySelectorAll('form[action*="reject"]');
-
-            acceptForms.forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Anda akan menyetujui link ini.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, setujui!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-
-            rejectForms.forEach(form => {
-                form.addEventListener('submit', function(event) {
-                    event.preventDefault();
-                    Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Anda akan menolak link ini.",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Ya, tolak!',
-                        cancelButtonText: 'Batal'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
-        });
     </script>
+
 </x-layout>

@@ -1,5 +1,5 @@
 <x-layout>
-    <div class="container mx-auto py-8">
+    <div class="container mx-auto py-8 px-4">
         <h1 class="text-3xl font-bold mb-6">Tambah Seksi Baru</h1>
 
         <form id="create-section-form" action="{{ route('sections.store') }}" method="POST" class="space-y-4">

@@ -18,7 +18,7 @@
 
             <div class="inline-flex items-center cursor-pointer" @click="openFilter = !openFilter">
                 <h3 class="text-base font-semibold">Filter berdasarkan kategori</h3>
-                <img :class="{ '-rotate-90': openFilter, 'rotate-0': !openFilter }"
+                <img :class="{ '-rotate-0': openFilter, '-rotate-90': !openFilter }"
                     src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
                     class="h-6 w-6 transition-transform duration-300 ml-2">
             </div>
@@ -39,45 +39,8 @@
         </div>
 
         <!-- User Table -->
-        <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table class="w-full text-sm text-left text-black bg-white border border-gray-200">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                    <tr>
-                        <th class="px-4 py-2 border-b">Nama</th>
-                        <th class="px-4 py-2 border-b">Email</th>
-                        <th class="px-4 py-2 border-b">Seksi</th>
-                        <th class="px-4 py-2 border-b">Role</th>
-                        <th class="px-4 py-2 border-b">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $user)
-                        <tr class="odd:bg-white even:bg-gray-50 border-b">
-                            <td class="px-4 py-2">{{ $user->name }}</td>
-                            <td class="px-4 py-2">{{ $user->email }}</td>
-                            <td class="px-4 py-2">{{ $user->section->section_name }}</td>
-                            <td class="px-4 py-2">{{ $user->role }}</td>
-                            <td class="px-4 py-2 flex space-x-2">
-                                <!-- Edit Button -->
-                                <button
-                                    onclick="openEditModal('{{ $user->id }}', '{{ $user->name }}', '{{ $user->email }}', '{{ $user->section->id }}', '{{ $user->role }}')"
-                                    class="text-blue-600 hover:text-blue-800">
-                                    <img src="{{ asset('svg/edit-biru.svg') }}" alt="Edit" class="w-6 h-6">
-                                </button>
-                                <!-- Delete Button -->
-                                <form action="{{ route('users.destroy', $user->id) }}" method="POST"
-                                    onsubmit="return confirm('Are you sure you want to delete this user?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-600 hover:text-red-800">
-                                        <img src="{{ asset('svg/x-merah.svg') }}" alt="Delete" class="w-6 h-6">
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div id="user-table-container" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+            @include('partials.users', ['users' => $users])
         </div>
 
         <!-- Pagination Links -->
@@ -86,85 +49,72 @@
         </div>
     </div>
 
-    <!-- Edit User Modal -->
-    <div id="edit-user-modal" class="fixed inset-0 items-center justify-center bg-gray-900 bg-opacity-50 z-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-            <h2 class="text-2xl font-bold mb-4">Edit User</h2>
-            <form id="edit-user-form">
-                @csrf
-                @method('PUT')
-                <input type="hidden" id="user-id" name="user_id">
-                <div class="mb-4">
-                    <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-                    <input type="text" id="name" name="name" required
-                        class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full">
-                </div>
-                <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input type="email" id="email" name="email" required
-                        class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300 w-full">
-                </div>
-                <div class="mb-4">
-                    <label for="section_id" class="block text-sm font-medium text-gray-700">Section</label>
-                    <select name="section_id" id="section_id"
-                        class="w-full mt-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <option value="" disabled selected>Pilih seksi</option>
-                        @foreach ($sections as $section)
-                            <option value="{{ $section->id }}">{{ $section->section_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
-                    <select id="role" name="role" required
-                        class="mt-1 px-4 py-2 border border-gray-300 rounded-lg w-full">
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-4">
-                    <button type="button" onclick="closeEditModal()"
-                        class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">Cancel</button>
-                    <button type="submit"
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <!-- JavaScript -->
     <script>
         function openEditModal(id, name, email, sectionId, role) {
-            document.getElementById('user-id').value = id;
-            document.getElementById('name').value = name;
-            document.getElementById('email').value = email;
-            document.getElementById('section_id').value = sectionId;
-            document.getElementById('role').value = role;
+            Swal.fire({
+                title: 'Edit User',
+                html: `
+                    <form id="edit-user-form">
+                        <input type="hidden" id="user-id" name="user_id" value="${id}">
+                        <div class="mb-4">
+                            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+                            <input type="text" id="name" name="name" value="${name}" required
+                                class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                            <input type="email" id="email" name="email" value="${email}" required
+                                class="mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm w-full">
+                        </div>
+                        <div class="mb-4">
+                            <label for="section_id" class="block text-sm font-medium text-gray-700">Section</label>
+                            <select name="section_id" id="section_id" class="w-full mt-1 px-4 py-2 border rounded-md">
+                                <option value="" disabled>Pilih seksi</option>
+                                @foreach ($sections as $section)
+                                    <option value="{{ $section->id }}" ${sectionId == {{ $section->id }} ? 'selected' : ''}>{{ $section->section_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="role" class="block text-sm font-medium text-gray-700">Role</label>
+                            <select id="role" name="role" required class="mt-1 px-4 py-2 border border-gray-300 w-full">
+                                <option value="admin" ${role == 'admin' ? 'selected' : ''}>Admin</option>
+                                <option value="user" ${role == 'user' ? 'selected' : ''}>User</option>
+                            </select>
+                        </div>
+                    </form>`,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                cancelButtonText: 'Cancel',
+                preConfirm: () => {
+                    const form = document.getElementById('edit-user-form');
+                    const formData = new FormData(form);
+                    const userId = form.querySelector('#user-id').value;
 
-            document.getElementById('edit-user-modal').classList.remove('hidden');
-        }
-
-        function closeEditModal() {
-            document.getElementById('edit-user-modal').classList.add('hidden');
-        }
-
-        document.getElementById('edit-user-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            let formData = new FormData(this);
-            let userId = document.getElementById('user-id').value;
-
-            fetch(`/users/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
-                            'content'),
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(Object.fromEntries(formData)),
-                })
-                .then(response => response.json())
-                .then(data => {
+                    return fetch(`/users/${userId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content'),
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(Object.fromEntries(formData)),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.success) {
+                                throw new Error(data.message || 'Update failed');
+                            }
+                            return data;
+                        })
+                        .catch(error => {
+                            Swal.showValidationMessage(`Request failed: ${error}`);
+                        });
+                }
+            }).then(result => {
+                if (result.isConfirmed) {
                     Swal.fire({
                         icon: 'success',
                         title: 'User Updated',
@@ -172,14 +122,33 @@
                     }).then(() => {
                         location.reload();
                     });
-                })
-                .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Update Failed',
-                        text: 'An error occurred while updating the user.',
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('search');
+            const filterForm = document.getElementById('filter-form');
+            const userTableContainer = document.getElementById('user-table-container');
+
+            function fetchData() {
+                const search = searchInput.value;
+                const formData = new FormData(filterForm);
+                formData.append('search', search);
+
+                fetch('{{ route('users.kelola') }}?' + new URLSearchParams(formData).toString(), {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        userTableContainer.innerHTML = data;
                     });
-                });
+            }
+
+            searchInput.addEventListener('input', fetchData);
+            filterForm.addEventListener('change', fetchData);
         });
     </script>
 </x-layout>

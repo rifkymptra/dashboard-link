@@ -41,16 +41,38 @@ class UserController extends Controller
                 'role' => $request->role,
             ]);
 
-            return redirect()->route('beranda')->with('success', 'User created successfully.');
+            return redirect()->back()->with('success', 'Akun berhasil dibuat.');
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => 'Gagal membuat akun.']);
         }
     }
 
-    public function kelolaUser()
+    public function kelolaUser(Request $request)
     {
-        $users = User::paginate(10);
-        $sections = Section::all();
+        $query = User::query();
+
+        // Filter by sections
+        if ($request->has('sections') && is_array($request->input('sections'))) {
+            $sections = $request->input('sections');
+            $query->whereIn('section_id', $sections);
+        }
+
+        // Search
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%$search%")
+                    ->orWhere('email', 'like', "%$search%");
+            });
+        }
+
+        $users = $query->paginate(10);
+        $sections = Section::all(); // Assuming you have a Section model
+
+        if ($request->ajax()) {
+            return view('partials.users', compact('users'))->render();
+        }
+
         return view('kelolauser', compact('users', 'sections'));
     }
 

@@ -1,243 +1,304 @@
 <x-layout>
-    <div class="container mx-auto px-4 py-8">
-        <h2 class="">Beranda</h2>
+    <div class="container px-4 py-8">
+        <h2 class="">Daftar Link</h2>
         <h1 class="text-3xl font-bold mb-4">Selamat datang!</h1>
 
-        <!-- Filter Section -->
-        <div class="mb-4" x-data="{ openFilter: false }">
-            <div class="mb-4">
-                <div class="inline-flex items-center cursor-pointer" @click="openFilter = !openFilter">
-                    <h3 class="text-base font-semibold">Filter berdasarkan kategori</h3>
-                    <img :class="{ 'rotate-180': openFilter }" src="{{ asset('svg/chevron-down.svg') }}" alt="Filter"
-                        class="h-6 w-6 transition-transform duration-300">
-                </div>
-                <form id="filter-form" x-show="openFilter" x-transition:enter="transition ease-out duration-300"
-                    x-transition:enter-start="opacity-0 transform -translate-y-4"
-                    x-transition:enter-end="opacity-100 transform translate-y-0"
-                    x-transition:leave="transition ease-in duration-300"
-                    x-transition:leave-start="opacity-100 transform translate-y-0"
-                    x-transition:leave-end="opacity-0 transform -translate-y-4">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4">
-                        @foreach ($sections as $section)
-                            <label
-                                class="my-1 mx-2 flex items-center space-x-2 p-2 border rounded-lg shadow-sm hover:bg-gray-100">
-                                <input type="checkbox" name="sections[]" value="{{ $section->id }}"
-                                    class="section-filter">
-                                <span class="ml-2 text-sm font-medium">{{ $section->section_name }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                </form>
-            </div>
+        <div class="flex items-center mb-4">
 
-            <div class="flex items-center mb-4">
-                <input type="text" id="search" placeholder="Search..."
-                    class="flex-grow px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring focus:border-blue-300">
-                <a href="/export-links"
-                    class="ml-2 mt-2 relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
-                    <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                        Export Excel
-                    </span>
-                </a>
-                <a href="/link/create"
-                    class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
-                    <span
-                        class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
-                        Tambah Link
-                    </span>
-                </a>
-            </div>
-
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                        <tr>
-                            <th scope="col" class="px-6 py-3">Judul</th>
-                            <th scope="col" class="px-6 py-3">Deskripsi</th>
-                            <th scope="col" class="px-6 py-3">Kategori</th>
-                            <th scope="col" class="px-6 py-3">URL</th>
-                            <th scope="col" class="px-6 py-3">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody id="links-table-body">
-                        @foreach ($links as $link)
-                            <tr
-                                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                                <td class="px-6 py-4">{{ $link->link_name }}</td>
-                                <td class="px-6 py-4">{{ $link->description_link }}</td>
-                                <td class="px-6 py-4">{{ $link->sectionId->section_name }}</td>
-                                <td class="px-6 py-4">
-                                    <a href="{{ $link->url }}"
-                                        class="text-blue-600 hover:underline">{{ $link->url }}</a>
-                                </td>
-                                <td class="px-6 py-4 text-right">
-                                    <button @click="editLink({{ $link->id }})"
-                                        class="font-medium text-blue-600 hover:underline">Edit</button>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-            <nav aria-label="Page navigation example" class="py-8">
-                <ul class="flex items-center -space-x-px h-10 text-base">
-                    <!-- Pagination links here -->
-                    <li>
-                        <a href="{{ $links->previousPageUrl() }}"
-                            class="flex items-center justify-center px-4 h-10 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            <span class="sr-only">Previous</span>
-                            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="M5 1 1 5l4 4" />
-                            </svg>
-                        </a>
-                    </li>
-                    @for ($i = 1; $i <= $links->lastPage(); $i++)
-                        <li>
-                            <a href="{{ $links->url($i) }}"
-                                class="flex items-center justify-center px-4 h-10 leading-tight {{ $links->currentPage() == $i ? 'text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700' : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white' }}">
-                                {{ $i }}
-                            </a>
-                        </li>
-                    @endfor
-                    <li>
-                        <a href="{{ $links->nextPageUrl() }}"
-                            class="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                            <span class="sr-only">Next</span>
-                            <svg class="w-3 h-3 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 6 10">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 9 4-4-4-4" />
-                            </svg>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            <a href="/export-links"
+                class="ml-2 mt-2 relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-teal-300 to-lime-300 group-hover:from-teal-300 group-hover:to-lime-300 dark:text-white dark:hover:text-gray-900 focus:ring-4 focus:outline-none focus:ring-lime-200 dark:focus:ring-lime-800">
+                <span
+                    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Export Excel
+                </span>
+            </a>
+            <a href="/link/create"
+                class="ml-2 relative inline-flex items-center justify-center p-0.5 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-cyan-500 to-blue-500 group-hover:from-cyan-500 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-cyan-200 dark:focus:ring-cyan-800">
+                <span
+                    class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Tambah Link
+                </span>
+            </a>
         </div>
 
-        <!-- Edit Modal -->
-        <div id="edit-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
-            x-data="{ showEditModal: false }" x-show="showEditModal" @keydown.escape.window="showEditModal = false"
-            @click.outside="showEditModal = false; console.log('Modal closed');">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-11/12 max-w-lg">
-                <h3 class="text-xl font-bold mb-4">Edit Link</h3>
-                <form id="edit-form" method="POST" action="{{ route('links.update') }}">
-                    @csrf
-                    @method('PUT')
-                    <input type="hidden" name="id" id="edit-link-id">
+        <div id="filter-container" class="mb-4">
+            <div class="flex space-x-4">
+                <div>
+                    <label for="filter-category" class="block text-sm font-medium text-gray-700">Kategori</label>
+                    <select id="filter-category"
+                        class="mt-1 block w-full rounded-lg hover:cursor-pointer hover:bg-gray-100">
+                        <option value="">Pilih Kategori</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="filter-instansi" class="block text-sm font-medium text-gray-700">Instansi</label>
+                    <select id="filter-instansi"
+                        class="mt-1 block w-full rounded-lg hover:cursor-pointer hover:bg-gray-100">
+                        <option value="">Pilih Instansi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative overflow-x-auto p-2 border">
+            <table id="linkTable"
+                class="w-full text-xs md:text-sm text-left rtl:text-right text-black dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Judul</th>
+                        <th scope="col" class="px-6 py-3 hidden md:table-cell">Kategori</th>
+                        <th scope="col" class="px-6 py-3">Instansi</th>
+                        <th scope="col" class="px-6 py-3">Deskripsi</th>
+                        @if (auth()->user())
+                            <th scope="col" class="px-6 py-3">Aksi</th>
+                        @endif
+                    </tr>
+                </thead>
+                <tbody id="links-table-body">
+                    @foreach ($links as $link)
+                        <tr
+                            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                            <td class="px-6 py-4 text-blue-600 font-semibold"> <a class="hover:underline"
+                                    href="{{ $link->url }}">
+                                    {{ $link->link_name }} </a>
+                                @if ($link->vpn)
+                                    <span
+                                        class="bg-yellow-300 p-1 text-[8px] md:text-[10px] font-bold text-black rounded-full">
+                                        VPN!
+                                    </span>
+                                @endif
+
+                            </td>
+                            <td class="px-6 py-4 hidden md:table-cell">{{ $link->sectionId->section_name }}</td>
+                            <td class="px-6 py-4">{{ $link->instansi }}</td>
+                            <td class="px-6 py-4 whitespace-normal">{{ $link->description_link }}</td>
+                            @if (auth()->user())
+                                <td class="px-6 py-4">
+                                    <button class="edit-btn text-blue-500 hover:text-blue-700"
+                                        data-id="{{ $link->id }}">Edit</button>
+                                </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Modal Edit -->
+        <div id="editModal" class="z-50 fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full">
+                <h2 class="text-xl font-semibold mb-4">Edit Link</h2>
+                <form id="editForm">
+                    <input type="hidden" id="edit-id" name="id">
+
                     <div class="mb-4">
-                        <label for="edit-link-name" class="block text-sm font-medium text-gray-700">Judul</label>
-                        <input type="text" name="link_name" id="edit-link-name"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required>
+                        <label for="edit-link_name" class="block text-sm font-medium text-gray-700">Judul</label>
+                        <input type="text" id="edit-link_name" name="link_name"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
-                    <div class="mb-4">
-                        <label for="edit-description-link"
-                            class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea name="description_link" id="edit-description-link"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            rows="3" required></textarea>
-                    </div>
+
                     <div class="mb-4">
                         <label for="edit-url" class="block text-sm font-medium text-gray-700">URL</label>
-                        <input type="text" name="url" id="edit-url"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                            required>
+                        <input type="text" id="edit-url" name="url"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
+
+                    <div class="mb-4">
+                        <label for="edit-instansi" class="block text-sm font-medium text-gray-700">Instansi</label>
+                        <input type="text" id="edit-instansi" name="instansi"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                    </div>
+
                     <div class="mb-4">
                         <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
                         <select name="section_id" id="edit-section"
-                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            class="mt-0 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             @foreach ($sections as $section)
                                 <option value="{{ $section->id }}">{{ $section->section_name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="flex justify-end">
-                        <button type="submit"
-                            class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">Simpan</button>
-                        <button type="button" @click="showEditModal = false"
-                            class="ml-4 px-4 py-2 bg-gray-300 text-gray-800 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">Batal</button>
+
+
+                    <div class="mb-4">
+                        <label for="edit-vpn" class="block text-sm font-medium text-gray-700">VPN</label>
+                        <select id="edit-vpn" name="vpn"
+                            class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
+                            <option value="1">Ya</option>
+                            <option value="0">Tidak</option>
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" id="cancelEditBtn"
+                            class="bg-gray-300 px-4 py-2 rounded-md text-white">Batal</button>
+                        <button type="submit" class="bg-blue-500 px-4 py-2 rounded-md text-white">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
 
 
+
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.4/js/dataTables.tailwindcss.js"></script>
+
     <script>
         $(document).ready(function() {
-            function fetchLinks(query, sections) {
-                $.ajax({
-                    url: '{{ route('links.search') }}',
-                    method: 'GET',
-                    data: {
-                        search: query,
-                        sections: sections
+            // Atur token CSRF untuk permintaan AJAX
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $('#linkTable').DataTable({
+                layout: {
+                    topStart: {
+                        search: {
+                            placeholder: 'Cari Website...',
+                            text: ''
+                        }
                     },
-                    success: function(response) {
-                        $('#links-table-body').html(response);
+                    topEnd: 'pageLength',
+                    bottomStart: 'info',
+                    bottomEnd: 'paging'
+                },
+                initComplete: function() {
+                    var api = this.api();
+
+                    // Kolom kedua (index 1)
+                    var columnCategory = api.column(1);
+                    var selectCategory = $('#filter-category');
+                    selectCategory.empty();
+
+                    selectCategory.append('<option value="">Pilih Kategori</option>');
+
+                    columnCategory
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function(d) {
+                            selectCategory.append('<option value="' + d + '">' + d + '</option>');
+                        });
+
+                    selectCategory.on('change', function() {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        columnCategory.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+
+                    // Kolom ketiga (index 2)
+                    var columnInstansi = api.column(2);
+                    var selectInstansi = $('#filter-instansi');
+                    selectInstansi.empty();
+
+                    selectInstansi.append('<option value="">Pilih Instansi</option>');
+
+                    columnInstansi
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function(d) {
+                            selectInstansi.append('<option value="' + d + '">' + d + '</option>');
+                        });
+
+                    selectInstansi.on('change', function() {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        columnInstansi.search(val ? '^' + val + '$' : '', true, false).draw();
+                    });
+                }
+            });
+
+            $('.edit-btn').on('click', function() {
+                var id = $(this).data('id');
+                var row = $(this).closest('tr');
+                var linkName = row.find('td:eq(0) a').text().trim();
+                var url = row.find('td:eq(0) a').attr('href').trim();
+                var instansi = row.find('td:eq(2)').text().trim();
+                var sectionId = row.find('td:eq(1)').text().trim();
+                var vpn = row.find('td:eq(0) span').text().trim() === 'VPN!' ? '1' : '0';
+                console.log(vpn);
+
+
+                // Populate the modal fields
+                $('#edit-id').val(id);
+                $('#edit-link_name').val(linkName);
+                $('#edit-url').val(url);
+                $('#edit-instansi').val(instansi);
+                var sectionDropdown = $('#edit-section');
+                sectionDropdown.val(sectionId); // Set nilai dropdown section
+
+                // Set nilai dropdown section berdasarkan nama
+                sectionDropdown.find('option').each(function() {
+                    if ($(this).text().trim() === sectionId) {
+                        $(this).prop('selected', true);
                     }
                 });
-            }
+                $('#edit-vpn').val(vpn);
 
-            function fetchLinkData(id) {
+                $('#editModal').removeClass('hidden');
+            });
+
+            $('#cancelEditBtn, #closeModal').on('click', function() {
+                $('#editModal').addClass('hidden');
+            });
+
+            $('#editForm').on('submit', function(e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+
                 $.ajax({
-                    url: '{{ url('links') }}/' + id + '/edit',
-                    method: 'GET',
+                    url: '/link/update', // Ganti dengan URL yang sesuai
+                    method: 'POST',
+                    data: formData,
                     success: function(response) {
-                        $('#edit-link-id').val(response.id);
-                        $('#edit-link-name').val(response.link_name);
-                        $('#edit-description-link').val(response.description_link);
-                        $('#edit-url').val(response.url);
-                        $('#edit-section').val(response.section_id);
-                        $('#edit-modal').show();
+                        Swal.fire({
+                            title: 'Sukses',
+                            text: 'Link berhasil diupdate',
+                            icon: 'success'
+                        }).then(() => {
+                            location.reload(); // Refresh halaman
+                        });
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON.errors;
+                        var errorMessages = [];
+
+                        // Clear previous error messages
+                        $('.error-message').remove();
+
+                        // Show error messages for each input
+                        $.each(errors, function(key, value) {
+                            $('#' + key).after(
+                                '<span class="error-message text-red-500">' + value[
+                                    0] + '</span>');
+                            errorMessages.push(value[0]);
+                        });
+
+                        // Create a combined error message
+                        var combinedErrorMessage = errorMessages.join(' | ');
+
+                        Swal.fire({
+                            title: 'Gagal',
+                            text: 'Terjadi kesalahan: ' + combinedErrorMessage,
+                            icon: 'error'
+                        });
                     }
                 });
-            }
-
-            $('#search').on('input', function() {
-                let query = $(this).val();
-                let sections = [];
-                $('.section-filter:checked').each(function() {
-                    sections.push($(this).val());
-                });
-                fetchLinks(query, sections);
             });
 
-            $('.section-filter').on('change', function() {
-                let query = $('#search').val();
-                let sections = [];
-                $('.section-filter:checked').each(function() {
-                    sections.push($(this).val());
-                });
-                fetchLinks(query, sections);
+            $(window).on('click', function(event) {
+                if ($(event.target).is('#editModal')) {
+                    $('#editModal').addClass('hidden');
+                }
             });
-
-            window.editLink = function(id) {
-                fetchLinkData(id);
-            };
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
-            @if (Session::has('success'))
-                Swal.fire({
-                    title: 'Sukses',
-                    text: '{{ Session::get('success') }}',
-                    icon: 'success'
-                });
-            @elseif (Session::has('error'))
-                Swal.fire({
-                    title: 'Gagal',
-                    text: '{{ Session::get('error') }}',
-                    icon: 'error'
-                });
-            @endif
         });
     </script>
+
+
+
 </x-layout>

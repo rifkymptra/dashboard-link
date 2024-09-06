@@ -3,7 +3,7 @@
         <h2>Akun</h2>
         <h1 class="text-3xl font-bold mb-6">Buat Akun</h1>
     </div>
-    <div class="container mx-auto px-40 pt-0 pb-8">
+    <div class="container mx-auto px-10 md:px-40 pt-0 pb-8">
         <form action="{{ route('users.store') }}" method="POST">
             @csrf
 
@@ -56,6 +56,10 @@
         </form>
     </div>
     <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // Nonaktifkan tombol submit untuk mencegah double submit
+            event.target.querySelector('button[type="submit"]').disabled = true;
+        });
         document.addEventListener('DOMContentLoaded', function() {
             // Handle successful creation
             @if (session('success'))

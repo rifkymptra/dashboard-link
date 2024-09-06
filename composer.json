@@ -9,6 +9,7 @@
         "laravel-lang/lang": "^15.5",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "masoudi/laravel-visitors": "^1.1",
         "phpoffice/phpspreadsheet": "^2.2",
         "realrashid/sweet-alert": "^7.2"
     },

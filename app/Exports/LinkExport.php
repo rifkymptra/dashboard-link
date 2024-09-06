@@ -22,17 +22,19 @@ class LinkExport
 
         // Menambahkan header
         $sheet->setCellValue('A1', 'Judul');
-        $sheet->setCellValue('B1', 'Deskripsi');
-        $sheet->setCellValue('C1', 'Kategori');
-        $sheet->setCellValue('D1', 'URL');
+        $sheet->setCellValue('B1', 'VPN');
+        $sheet->setCellValue('C1', 'Deskripsi');
+        $sheet->setCellValue('D1', 'Kategori');
+        $sheet->setCellValue('E1', 'URL');
 
         // Menambahkan data
         $row = 2;
         foreach ($this->links as $link) {
             $sheet->setCellValue("A{$row}", $link->link_name);
-            $sheet->setCellValue("B{$row}", $link->description_link);
-            $sheet->setCellValue("C{$row}", $link->submittedBy->section->section_name);
-            $sheet->setCellValue("D{$row}", $link->url);
+            $sheet->setCellValue("B{$row}", $link->vpn ? 'Ya' : 'Tidak');
+            $sheet->setCellValue("C{$row}", $link->description_link);
+            $sheet->setCellValue("D{$row}", $link->submittedBy->section->section_name);
+            $sheet->setCellValue("E{$row}", $link->url);
             $row++;
         }
 
