@@ -177,6 +177,7 @@ class LinkController extends Controller
             'url' => 'required|url',
             'instansi' => 'required|string|max:255',
             'section_id' => 'required|integer|exists:sections,id',
+            'description_link' => 'required|string|max:1000',
             'vpn' => 'required|boolean',
         ]);
 

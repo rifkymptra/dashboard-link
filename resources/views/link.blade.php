@@ -91,25 +91,30 @@
                 <form id="editForm">
                     <input type="hidden" id="edit-id" name="id">
 
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <label for="edit-link_name" class="block text-sm font-medium text-gray-700">Judul</label>
                         <input type="text" id="edit-link_name" name="link_name"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <label for="edit-url" class="block text-sm font-medium text-gray-700">URL</label>
                         <input type="text" id="edit-url" name="url"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-2">
                         <label for="edit-instansi" class="block text-sm font-medium text-gray-700">Instansi</label>
                         <input type="text" id="edit-instansi" name="instansi"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-2">
+                        <label for="edit-description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
+                        <textarea id="edit-description" name="description_link" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                    </div>
+
+                    <div class="mb-2">
                         <label for="edit-section" class="block text-sm font-medium text-gray-700">Kategori</label>
                         <select name="section_id" id="edit-section"
                             class="mt-0 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -219,6 +224,7 @@
                 var url = row.find('td:eq(0) a').attr('href').trim();
                 var instansi = row.find('td:eq(2)').text().trim();
                 var sectionId = row.find('td:eq(1)').text().trim();
+                var description = row.find('td:eq(3)').text().trim();
                 var vpn = row.find('td:eq(0) span').text().trim() === 'VPN!' ? '1' : '0';
                 console.log(vpn);
 
@@ -228,6 +234,7 @@
                 $('#edit-link_name').val(linkName);
                 $('#edit-url').val(url);
                 $('#edit-instansi').val(instansi);
+                $('#edit-description').val(description);
                 var sectionDropdown = $('#edit-section');
                 sectionDropdown.val(sectionId); // Set nilai dropdown section
 
